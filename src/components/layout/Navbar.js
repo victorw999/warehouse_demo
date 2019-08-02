@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import SignedInLinks from "./SignedInLinks";
 import SignedOutLinks from "./SignedOutLinks";
 // import Vicmod from "./Vicmod";
+// import ToggleByAuthor from "./ToggleByAuthor";
 import { connect } from "react-redux";
 
 const Navbar = props => {
   const { auth, profile } = props;
-  // console.log(auth);
 
   const links = auth.uid ? (
     <SignedInLinks profile={profile} />
@@ -16,15 +16,18 @@ const Navbar = props => {
   );
 
   return (
-    <nav className="nav-wrapper grey darken-3">
-      <div className="container">
-        <Link to="/" className="brand-logo">
-          AKWA
-        </Link>
-        {links}
-        {/* <Vicmod /> */}
-      </div>
-    </nav>
+    <div className="navbar-fixed">
+      <nav className="nav-wrapper grey darken-3">
+        <div className="container">
+          <Link to="/" className="brand-logo">
+            AKWA
+          </Link>
+
+          {links}
+          {/* <Vicmod /> */}
+        </div>
+      </nav>
+    </div>
   );
 };
 
