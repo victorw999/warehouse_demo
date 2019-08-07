@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { createProject } from "../../store/actions/projectActions";
+import { createOrder } from "../../store/actions/orderActions";
 import { Redirect } from "react-router-dom";
 import ItemList from "./ItemList";
 import { timingSafeEqual } from "crypto";
@@ -15,32 +15,42 @@ class CreateOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "",
+      // id: "",
       amzId: "",
-      itemlist: [],
-      createdBy: "Victor Admin",
-      createdTime: ""
+      itemlist: []
+      // createdBy: "Victor Admin"
     };
     this.validate = this.validate.bind(this);
   }
 
-  handleOrderId = e => {
+  // handleOrderId = e => {
+  //   this.setState({
+  //     amzId: e.target.value
+  //   });
+  // };
+
+  handleChange = e => {
     this.setState({
-      amzId: e.target.value
+      [e.target.id]: e.target.value
     });
   };
-
   handleSubmit = e => {
     e.preventDefault();
-    // console.log(this.state);
-    // this.props.CreateOrder(this.state); // dispatch action via mapDispatchToProps()
+
     // this.props.history.push("/"); // redirect to homepage after finished creating
 
-    let newId = "order-" + new Date().getTime(); //generate an unique key
-    this.setState({
-      id: newId,
-      createdTime: moment(new Date().getTime()).format()
-    });
+    // let newId = "order-" + new Date().getTime(); //generate an unique key
+    // this.setState({
+    //   id: newId,
+    //   createdTime: moment(new Date().getTime()).format()
+    // });
+
+    /**
+     * use action in mapDispatchToProps()
+     * passing local state into action
+     * it will run the func in orderActions.js
+     */
+    this.props.createOrder(this.state);
   };
 
   updateItemListInOrder = newItemList => {
@@ -72,8 +82,8 @@ class CreateOrder extends Component {
 */
 
   render() {
-    const { auth } = this.props;
-    if (!auth.uid) return <Redirect to="/signin" />;
+    // const { auth } = this.props;
+    // if (!auth.uid) return <Redirect to="/signin" />;
 
     return (
       <div className="container">
@@ -87,19 +97,19 @@ class CreateOrder extends Component {
           <div className="input-field">
             <input
               type="text"
-              id="title"
-              onChange={this.handleOrderId.bind(this)}
+              id="amzId"
+              onChange={this.handleChange.bind(this)}
             />
-            <label htmlFor="title">order-id</label>
+            <label htmlFor="amzId">order-id</label>
           </div>
 
           <div className="input-field">
             <textarea
-              id="content"
+              id="additionalInfo"
               className="materialize-textarea"
-              onChange={this.handleChange}
+              onChange={this.handleChange.bind(this)}
             />
-            <label htmlFor="content">Additional Info</label>
+            <label htmlFor="additionalInfo">Additional Info</label>
           </div>
 
           <div className="input-field">
@@ -120,18 +130,20 @@ class CreateOrder extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    auth: state.firebase.auth
-  };
-};
+// const mapStateToProps = state => {
+//   return {
+//     auth: state.firebase.auth
+//   };
+// };
+
 const mapDispatchToProps = dispatch => {
   return {
-    // createProject: project => dispatch(createProject(project))
+    createOrder: order => dispatch(createOrder(order))
   };
 };
 
 export default connect(
-  mapStateToProps,
+  // mapStateToProps,
+  null,
   mapDispatchToProps
 )(CreateOrder);

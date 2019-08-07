@@ -10,6 +10,8 @@ import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import { Redirect } from "react-router-dom";
 
+import { Dropdown, Button, Divider, Icon } from "react-materialize";
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +35,27 @@ class Dashboard extends Component {
     if (!auth.uid) return <Redirect to="/signin" />;
     return (
       <div className="dashboard container">
+        <div
+          className="row center"
+          style={{ background: "grey", height: "100vh" }}
+        >
+          {/* <!-- Dropdown Structure --> */}
+          <Dropdown trigger={<Button />}>
+            <a href="#!">one</a>
+            <a href="#!">two</a>
+            <Divider />
+            <a href="#!">three</a>
+            <a href="#!">
+              <Icon>view_module</Icon>
+              four
+            </a>
+            <a href="#!">
+              <Icon>cloud</Icon>
+              five
+            </a>
+          </Dropdown>
+          {/* end dropdown */}
+        </div>
         <div className="row center">
           <ToggleByAuthor handleToggle={this.handleToggleSortByAuthor} />
           {this.state.isProjectListByAuthor ? (

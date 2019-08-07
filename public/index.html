@@ -20,16 +20,24 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
 
-    <!--Import Google Icon Font-->
+    <!-- Compiled and minified CSS -->
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <!-- Compiled and minified CSS -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+
+    <!--Import jQuery before materialize.js-->
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-2.1.4.min.js"
+    ></script>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <title>React App</title>
   </head>
@@ -46,6 +54,40 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+    <!-- <script type="text/JavaScript">
+
+    document.addEventListener("DOMContentLoaded", function() {
+      var elems = document.querySelectorAll(".dropdown-trigger");
+      var instances = M.Dropdown.init(elems, options);
+    });
+  </script> -->
+
+    <script>
+      // document.addEventListener("DOMContentLoaded", function() {
+      //   var elems = document.querySelectorAll(".dropdown-trigger");
+      //   var instances = M.Dropdown.init(elems, { hover: true });
+      // });
+
+      $(document).ready(function() {
+        $(".dropdown-trigger").dropdown({
+          hover: true // Activate on hover
+        });
+
+        $("#testbutton").click(function() {
+          $(".test").hide();
+        });
+
+        $(".testbutton").click(function() {
+          alert(".testbutton");
+        });
+      });
+
+      // M.AutoInit();
+      // document.addEventListener("DOMContentLoaded", function() {
+      //   var elems = document.querySelectorAll(".dropdown-trigger");
+      //   var instances = M.Dropdown.init(elems, { hover: true });
+      // });
+    </script>
   </body>
 </html>

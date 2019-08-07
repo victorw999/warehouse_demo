@@ -5,7 +5,6 @@ import moment from "moment";
 const OrderSummary = ({ order }) => {
   return (
     <tr>
-      {/* <td>{order.id}</td> */}
       <td>
         <span className="black-text"> Order Date: {order.orderDate} </span>{" "}
         <br />
@@ -19,13 +18,13 @@ const OrderSummary = ({ order }) => {
             {order.shipOption}
           </span>
           <br />
-          {order.addr}
+          {order.shipCity + " " + order.shipState + " " + order.shipZip}
         </span>
       </td>
       <td style={{ whiteSpace: "pre-line" }}>
         {order.itemlist.map(item => {
           return (
-            <span>
+            <span key={item.key}>
               <span
                 className="left badge black-text"
                 style={{ textAlign: "left" }}
