@@ -1,7 +1,6 @@
 const initState = {
   orders: [
     {
-      id: "1",
       amzId: "114-9855599-7806616",
       orderDate: "8/2/2019 1:40PM PDT",
       buyer: "Donaul Scarmuzzi",
@@ -17,7 +16,6 @@ const initState = {
       ]
     },
     {
-      id: "2",
       amzId: "114-1234567-1234567",
       orderDate: "8/1/2019 12:40AM PDT",
       buyer: "Jack Gilbert",
@@ -38,6 +36,12 @@ const orderReducer = (state = initState, action) => {
       return state;
     case "CREATE_ORDER_ERROR":
       console.log("create order error", action.err);
+      return state;
+    case "DELETE_ORDER":
+      console.log("delete order", action.order);
+      return state;
+    case "DELETE_ORDER_ERROR":
+      console.log("delete order error", action.err);
       return state;
     default:
       return state;

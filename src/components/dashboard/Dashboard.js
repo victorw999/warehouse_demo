@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import ProjectListByTime from "../projects/ProjectListByTime";
 import ProjectListByAuthor from "../projects/ProjectListByAuthor";
 import ToggleByAuthor from "../layout/ToggleByAuthor";
+import Toggle2 from "../layout/Toggle2";
 import OrderList from "../orders/OrderList";
+import StyleList from "../orders/StyleList";
 
 import Notifications from "./Notifications";
 import { connect } from "react-redux";
@@ -10,55 +12,45 @@ import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import { Redirect } from "react-router-dom";
 
-import { Dropdown, Button, Divider, Icon } from "react-materialize";
-
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isProjectListByAuthor: false
+      // isProjectListByAuthor: false,
+      toggle2: false
     };
   }
 
-  handleToggleSortByAuthor = () => {
+  // handleToggleSortByAuthor = () => {
+  //   this.setState({
+  //     isProjectListByAuthor: !this.state.isProjectListByAuthor
+  //   });
+  // };
+
+  handleToggle2 = () => {
     this.setState({
-      isProjectListByAuthor: !this.state.isProjectListByAuthor
+      toggle2: !this.state.toggle2
     });
   };
 
   render() {
-    // console.log(this.state);
-    console.log(this.props);
-
     const { orders, projects, auth, notifications } = this.props;
 
     if (!auth.uid) return <Redirect to="/signin" />;
     return (
       <div className="dashboard container">
-        <div
-          className="row center"
-          style={{ background: "grey", height: "100vh" }}
-        >
-          {/* <!-- Dropdown Structure --> */}
-          <Dropdown trigger={<Button />}>
-            <a href="#!">one</a>
-            <a href="#!">two</a>
-            <Divider />
-            <a href="#!">three</a>
-            <a href="#!">
-              <Icon>view_module</Icon>
-              four
-            </a>
-            <a href="#!">
-              <Icon>cloud</Icon>
-              five
-            </a>
-          </Dropdown>
-          {/* end dropdown */}
-        </div>
-        <div className="row center">
+        {/* <div className="row center">
           <ToggleByAuthor handleToggle={this.handleToggleSortByAuthor} />
           {this.state.isProjectListByAuthor ? (
+            <button className="btn-floating teal">teal</button>
+          ) : (
+            <button className="btn-floating red">red</button>
+          )}
+        </div> */}
+
+        <div className="row center">
+          <Toggle2 handleToggle={this.handleToggle2} />
+          {this.state.toggle2 ? (
             <button className="btn-floating teal">teal</button>
           ) : (
             <button className="btn-floating red">red</button>
@@ -66,7 +58,11 @@ class Dashboard extends Component {
         </div>
 
         <div className="row center">
-          <OrderList orders={orders} />
+          {this.state.toggle2 ? (
+            <OrderList orders={orders} />
+          ) : (
+            <StyleList orders={orders} />
+          )}
         </div>
 
         <div className="row">
@@ -94,17 +90,18 @@ const mapStateToProps = state => {
     projects: state.firestore.ordered.projects,
     auth: state.firebase.auth,
     notifications: state.firestore.ordered.notifications,
-    orders: state.order.orders
+    ordersOld: state.order.orders, // demo data frm 'reducers/orderReducer.js'
+    orders: state.firestore.ordered.orders
   };
 };
 
 export default compose(
   connect(mapStateToProps),
   firestoreConnect([
-    // {
-    //   collection: "projects",
-    //   orderBy: ["createdAt", "desc"]
-    // },
+    {
+      collection: "orders"
+      // orderBy: ["createdAt", "desc"]
+    },
     {
       collection: "notifications",
       limit: 5,

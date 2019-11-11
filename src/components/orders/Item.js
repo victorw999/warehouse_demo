@@ -2,7 +2,7 @@
 // ref: https://codepen.io/marekdano/pen/bVNYpq?editors=1010
 
 // 190731 change item.js from class to function
-import React, { useEffect } from "react";
+import React from "react";
 import IntegerInput from "./IntegerInput";
 
 const Item = props => {
@@ -11,11 +11,10 @@ const Item = props => {
      *  take the newValue passed up from IntegerInput,
      *  combined w/ current index, send 'em into parent's param
      *  */
-    // console.log("newValue: " + newValue + "  index:" + this.props.index);
     props.handleChangeInIntegerInput(newValue, props.index);
   };
 
-  const handleClick = () => {
+  const handleRemoveClick = () => {
     var index = parseInt(props.index);
     props.removeItem(index);
   };
@@ -24,8 +23,14 @@ const Item = props => {
     <li className="collection-item text-center row valign-wrapper">
       <div className="btn-flat col s5">{props.item.sku}</div>
       <div className="col s4">
-        <IntegerInput
+        {/* <IntegerInput
           value={props.item.quantity}
+          min={props.min}
+          max={props.max}
+          onChange={handleChangeInIntegerInput}
+        /> */}
+        <IntegerInput
+          item={props.item}
           min={props.min}
           max={props.max}
           onChange={handleChangeInIntegerInput}
@@ -46,7 +51,7 @@ const Item = props => {
           id="btn_remove"
           className="btn-floating waves-effect waves-light red right-align"
           style={{ marginTop: "0", marginBottom: "0" }}
-          onClick={handleClick}
+          onClick={handleRemoveClick}
         >
           <i className="material-icons">remove</i>
         </button>

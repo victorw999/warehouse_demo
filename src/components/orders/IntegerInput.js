@@ -13,28 +13,42 @@ const isValid = (value, min, max) =>
   (min === undefined || value >= min) &&
   (max === undefined || value <= max);
 
-const IntegerInput = ({ value, min, max, onChange }) => {
+// const IntegerInput = ({ value, min, max, onChange }) => {
+const IntegerInput = ({ item, min, max, onChange }) => {
+  var value = item.quantity;
   const regexp = new RegExp(`^-?[0-9]*$`);
-  const [internalValue, setInternalValue] = useState(value);
-  const [valid, setValid] = useState(isValid(value, min, max));
 
-  //
-  /**
-   * useEffect hook is similar to componentDidUpdate, so i update internalValue
-   * to prop's value in this func.
-   *  */
+  const [internalValue, setInternalValue] = useState(0);
+  const [valid, setValid] = useState(isValid(value, min, max));
+  const [msg, setMsg] = useState("");
+
   useEffect(() => {
     setInternalValue(value);
-  }, [value]); //tell React to skip applying an effect if value hasn’t changed between re-renders
+  }, [value]);
+
+  useEffect(() => {
+    onChange({ value: value, msg: msg });
+  }, [msg]);
 
   const handleChange = event => {
     const newValue = event.target.value;
     if (regexp.test(newValue)) {
       setInternalValue(newValue);
       let newValid = isValid(newValue, min, max);
+
       setValid(newValid);
       if (newValid) {
-        onChange(newValue);
+        setMsg("");
+        onChange({ value: newValue, msg: msg });
+      } else {
+        if (newValue < min) {
+          setMsg("too small");
+        } else if (newValue > max) {
+          setMsg("too big");
+        } else {
+          setMsg("not valid");
+        }
+        onChange({ value: value, msg: msg });
       }
     }
   };
@@ -43,67 +57,31 @@ const IntegerInput = ({ value, min, max, onChange }) => {
     <div>
       <input
         type="number"
-        // className={valid ? "" : "invalid"}
         className={
           valid
-            ? "btn-flat green lighten-5  center-align"
+            ? "btn-flat green lighten-5 center-align"
             : "btn-flat pink lighten-5 pink-text center-align"
         }
         value={internalValue}
         onChange={handleChange}
-        // onChange={event => {
-        //   const newValue = event.target.value;
-        //   if (regexp.test(newValue)) {
-        //     setInternalValue(newValue);
-        //     let newValid = isValid(newValue, min, max);
-        //     setValid(newValid);
-        //     if (newValid) {
-        //       onChange(newValue);
-        //     }
-        //   }
-        // }}
         onBlur={() => {
           if (internalValue < min) {
             setInternalValue(min);
+            // setMsg("reset to min");
+            onChange({ value: min, msg: "" });
           } else if (internalValue > max) {
             setInternalValue(max);
+            // setMsg("reset to max");
+            onChange({ value: max, msg: "" });
           } else {
             setInternalValue(value);
           }
+
           setValid(true);
         }}
       />
-      {/* <h5>valid: {valid ? "true" : "false"} </h5>
-      <h5>internalValue: {internalValue} </h5> */}
     </div>
   );
 };
-
-/**
- * set min max as (0 ~ 100)
- * */
-
-// const IntegerInput = props => {
-//   const [value, setValue] = useState(props.value);
-
-//   const handleChange = value => e => {
-//     // setValue(value);
-//     console.log(" ** " + e.target.value);
-//     // console.log(" ** " + value);
-//   };
-
-//   return (
-//     <div>
-//       <IntegerInputCore
-//         value={value}
-//         min={props.min}
-//         max={props.max}
-//         onChange={value => setValue(value)}
-//         // onChange={handleChange(value)}
-//       />
-//       {/* <input type="number" value="99" onChange={handleChange(value)} /> */}
-//     </div>
-//   );
-// };
 
 export default IntegerInput;

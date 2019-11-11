@@ -6,7 +6,8 @@ class ItemList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // itemlist: this.props.itemlist ? this.props.itemlist : [],
+      itemlist: this.props.itemlist ? this.props.itemlist : [],
+
       qtyMin: 1, // set input floor
       qtyMax: 100 // set input ceiling
     };
@@ -21,30 +22,27 @@ class ItemList extends Component {
   addItem = newItem => {
     let skuEntered = newItem[0].trim(); // receiving data from AddItemForm.js
     let qtyEntered = parseInt(newItem[1]);
+    let currentArray = this.state.itemlist;
     let skuExistsFlag = false;
 
     // check if SKU already been entered,  if sku already exists in array, accrue qty
-    var newList = this.props.itemlist.map(item => {
-      var newQty,
-        newMsg = "";
+    currentArray.forEach(item => {
       if (item.sku === skuEntered) {
         let sum = qtyEntered + item.quantity;
-        newQty = sum < this.state.qtyMax ? sum : this.state.qtyMax; // new qty not exceeding qtyMax (preset qty ceiling)
+        item.quantity = sum < this.state.qtyMax ? sum : this.state.qtyMax; // new qty not exceeding qtyMax (preset qty ceiling)
         skuExistsFlag = true;
-        newMsg =
+        item.msg =
           sum < this.state.qtyMax
             ? ""
             : ` ${this.state.qtyMin} ~ ${this.state.qtyMax} `;
-
-        return { ...item, quantity: newQty, msg: newMsg };
-      } else {
-        return item;
       }
     });
 
-    // find index of obj in array:  let matchingIndex = currentArray.findIndex(item => item.sku === skuEntered);
+    // find index of obj in array
+    // let matchingIndex = currentArray.findIndex(item => item.sku === skuEntered);
+
     if (skuExistsFlag === true) {
-      this.props.updateList(newList);
+      this.setState({ itemlist: [...this.state.itemlist] });
     } else {
       let timestamp = new Date().getTime(); //generate an unique key
       let newObj = {
@@ -57,16 +55,15 @@ class ItemList extends Component {
             ? ""
             : `Quantity can't be larger than ${this.state.qtyMax} `
       };
-      this.props.updateList([...this.props.itemlist, newObj]);
+      this.setState({ itemlist: [...this.state.itemlist, newObj] });
     }
+
+    this.props.updateItemListInOrder(this.state.itemlist); // update parent's state
   };
 
   removeItem = index => {
-    let items = this.props.itemlist;
-    const newList = items
-      .slice(0, index)
-      .concat(items.slice(index + 1, items.length));
-    this.props.updateList(newList);
+    let newlist = this.state.itemlist.splice(index, 1);
+    this.setState(newlist);
   };
 
   /**
@@ -75,7 +72,7 @@ class ItemList extends Component {
    * 1. event obj which this func is listening to
    * 2. additional data that wrapped around the event func
    *
-   * Currently this func is not being used
+   * Curruntly this func is not being used
    * since 'handleChangeInIntegerInput' can do the job
    *  */
   handleQtyChange = idx => evt => {
@@ -91,28 +88,26 @@ class ItemList extends Component {
    * from Item.js, from Integerinput.js, via param instead of e.target.value
    */
   handleChangeInIntegerInput = (newValue, currentIndex) => {
-    const newList = this.props.itemlist.map((item, index) => {
+    const newItemlist = this.state.itemlist.map((item, index) => {
       if (currentIndex !== index) return item;
       else {
-        let modifiedItem = {
-          ...item,
-          quantity: newValue.value,
-          msg: newValue.msg
-        };
-        // if (modifiedItem.quantity < this.state.qtyMax) {
-        //   modifiedItem.msg = "";
-        // }
+        let modifiedItem = { ...item, quantity: newValue };
+        if (modifiedItem.quantity < this.state.qtyMax) {
+          modifiedItem.msg = "";
+        }
         return modifiedItem;
       }
     });
-    this.props.updateList(newList);
+    this.setState({ itemlist: newItemlist });
   };
 
   componentDidUpdate(prevProps, prevState) {
+    //Typical usage, don't forget to compare the props
     if (this.state.itemlist !== prevState.itemlist) {
-      // mod1: if local component state changes, then update parent's state as well. mk sure it sync with CreateOrder.js
-      // mod2: disable below when I change source of truth from ItemList to CreateOrder.js or OrderDetail.js */
-      // this.props.updateItemListInOrder(this.state.itemlist);
+      // if local component state changes,
+      // then update parent's state as well.
+      // mk sure it sync with CreateOrder.js
+      this.props.updateItemListInOrder(this.state.itemlist);
     }
   }
 
@@ -125,7 +120,7 @@ class ItemList extends Component {
           qtyMax={this.state.qtyMax}
         />
         <ul className="collection with-header">
-          {this.props.itemlist.map((item, index) => {
+          {this.state.itemlist.map((item, index) => {
             return (
               <Item
                 key={index}

@@ -6,14 +6,14 @@ import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 
+// const deleteOrder =
 const OrderList = ({ orders }) => {
   return (
     <div className="project-list section">
       <h5 className="card-title">Orders</h5>
-      <table>
+      <table className="responsive-table">
         <thead>
-          <tr>
-            {/* <th>id</th> */}
+          <tr className="hide-on-small-only">
             <th>Order Details</th>
             <th>Itemlist</th>
             <th>Actions</th>
@@ -22,12 +22,7 @@ const OrderList = ({ orders }) => {
         <tbody>
           {orders &&
             orders.map(order => {
-              return (
-                // <Link to={"/project/" + order.id} key={order.id}>
-                //   <OrderSummary order={order} />
-                // </Link>
-                <OrderSummary order={order} key={order.id} />
-              );
+              return <OrderSummary order={order} key={order.id} />;
             })}
         </tbody>
       </table>
@@ -35,19 +30,25 @@ const OrderList = ({ orders }) => {
   );
 };
 
-export default OrderList;
-// const mapStateToProps = state => {
-//   return {
-//     // projects: state.firestore.ordered.projects
-//     orders: state.order.orders
-//   };
-// };
-// export default compose(
-//   connect(mapStateToProps),
-//   // firestoreConnect([
-//   //   {
-//   //     collection: "projects",
-//   //     orderBy: ["createdAt", "desc"]
-//   //   }
-//   // ])
-// )(OrderList);
+// export default OrderList;
+const mapStateToProps = state => {
+  /**
+   *
+   *  don't need to access state from here, rather use props from Parent: Dashboard.js
+   *
+   */
+
+  return {
+    // orders: state.firestore.ordered.orders
+    // orders: state.order.orders   // demo data frm 'reducers/orderReducer.js'
+  };
+};
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([
+    {
+      collection: "orders",
+      orderBy: ["createdAt", "desc"]
+    }
+  ])
+)(OrderList);

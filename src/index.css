@@ -10,7 +10,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   /* background: url(/img/mario-bg.png) no-repeat; */
-  background: url(/img/section4.jpg) no-repeat;
+  background: url(/img/2020-001.jpg) no-repeat;
   background-size: 100%;
   background-position: bottom;
   min-height: 100%;
@@ -26,6 +26,11 @@ form {
 form button,
 form h5 {
   margin: 20px 0;
+}
+
+.datepicker-calendar button {
+  /* the above "form button" rule is affecting date picker, hence here overriding it */
+  margin: auto;
 }
 
 input[type="text"]:not(.browser-default):focus:not([readonly]),
@@ -46,4 +51,17 @@ input[type="password"]:not(.browser-default):focus:not([readonly]) + label {
 /* ToggleByAuthor.js */
 .swith.toggleByAuthor {
   text-align: center;
+}
+
+/* DROPDOWN: fix materialize icon and the parent nav don't have the same height */
+.nav_dropdown_btn.btn-floating .material-icons {
+  line-height: 40px; /*  fix for floating btn */
+}
+.nav_dropdown_btn.btn .material-icons {
+  line-height: 36px; /*  fix for regular btn */
+}
+
+/* DROPDOWN: increase width */
+.dropdown-content.nav_dropdown {
+  width: 150px !important;
 }

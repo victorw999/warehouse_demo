@@ -1,6 +1,6 @@
 /**
- * OrderDetail3 is trying to use
- * useReducer hook to implement
+ * this is a WORKING IMPLEMENTATION. it works by itself
+ * using only useState() and useEffect, not yet useReducer
  *
  * While 'CreateOrder.js' is to create an order,
  * 'OrderDetail.js' is to edit an order
@@ -8,7 +8,7 @@
  * 'CreateOrder.js' is constructed with class component
  */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useReducer } from "react";
 import { DatePicker } from "react-materialize";
 import { connect } from "react-redux";
 import ItemList from "./ItemList";
@@ -16,20 +16,66 @@ import { updateOrder } from "../../store/actions/orderActions";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import { Redirect } from "react-router-dom";
-import { isValidDate } from "./VicUtilityFunctions";
-import useDataApi from "./useDataApi";
+import { isValidDate, getTimeStamp } from "./VicUtilityFunctions";
+
+// const reducer = (state, action) => {
+//   switch (action.type) {
+//     case "CHANGE_DATE":
+//       return {
+//         ...state,
+//         orderDate: action.item
+//       };
+//     case "INIT":
+//       return {
+//         ...action.item
+//       };
+//     default:
+//       return state;
+//   }
+// };
 
 const OrderDetail = props => {
   const { order, auth, updateOrder } = props;
+  // const [state, dispatch] = useReducer(reducer, initialState);
 
-  // useReducer: custom hook
-  const [{ data, isLoading, isError }, updateData] = useDataApi(order);
+  // new state var
+  const [data, setData] = useState({});
+  // local component's state variable, temporarily hold data before resubmit to firestore
+  // Do Not remove the braces inside the parathesis, it'll cause error when 'data' is empty
 
   // intermediary var to store new date when change event is fired in DatePicker
   const [newOrderDate, setNewOrderDate] = useState();
 
+  const [initFlag, setInitFlag] = useState(false); // signals if data successfuly loaded into state var 'data'
+
   // this flag is to make sure DatePicker will be init only once
   const [initDateFlag, setInitDateFlag] = useState(false);
+
+  /********************************
+   * init state section
+   ********************************/
+  useEffect(() => {
+    if (order != null) {
+      setInitFlag(true);
+    }
+    if (!initFlag) {
+      asyncCall(); // only fetch data when 'initFlag' has not been set
+    }
+  }, [order]); // put 'order' in 2nd args to to check if "firestore->props->order" is complete
+
+  const resolveAfterLoaded = () => {
+    return new Promise(resolve => {
+      if (order) {
+        resolve(order);
+      }
+    });
+  };
+
+  const asyncCall = async () => {
+    await resolveAfterLoaded().then(result => {
+      setData(result);
+    });
+  };
 
   // init DatePicker
   useEffect(() => {
@@ -44,12 +90,16 @@ const OrderDetail = props => {
   // update DatePicker
   useEffect(() => {
     if (newOrderDate && data.orderDate) {
-      updateData({
+      setData({
         ...data,
         orderDate: new Date(newOrderDate)
       });
     }
   }, [newOrderDate]);
+
+  /********************************
+   * END: init section
+   ********************************/
 
   let refDatePicker = useRef();
 
@@ -62,9 +112,16 @@ const OrderDetail = props => {
     }
   };
 
+  // const handleDatePickerChange = e => {
+  //   console.log("handling DatePicker change");
+  //   dispatch({ type: "CHANGE_DATE", e });
+  // };
+
   // why when use DatePicker to trigger this func, then the initDateFlag is always false
   // but when use an Input to trigger this func, then the initDateFlag becomes true???
   const handleDatePickerChange = e => {
+    // 'initDateFlag' is always false when dealing with DatePicker
+
     if (isValidDate(e)) {
       setNewOrderDate(e);
     } else {
@@ -73,7 +130,7 @@ const OrderDetail = props => {
   };
 
   const handleChange = e => {
-    updateData({
+    setData({
       ...data,
       [e.target.id]: e.target.value
     });
@@ -82,6 +139,9 @@ const OrderDetail = props => {
   const handleSubmit = e => {
     e.preventDefault();
     updateOrder(data); // start dispatching ...
+
+    // console.log(order.orderDate.toDate());
+    // this.props.createOrder(this.state);
     props.history.push("/"); // redirect to homepage after finished creating
   };
 
@@ -93,7 +153,7 @@ const OrderDetail = props => {
    *  3. remove item
    */
   const updateList = newlist => {
-    updateData({ ...data, itemlist: newlist });
+    setData({ ...data, itemlist: newlist });
   };
 
   if (!auth.uid) return <Redirect to="/signin" />;
@@ -101,18 +161,16 @@ const OrderDetail = props => {
   if (order) {
     return (
       <div className="container">
-        <h5 className="grey-text text-darken-3">
-          Order
-          {isError && <span> Something is wrong ... </span>}
-          {isLoading ? <span> Loading ... </span> : " "}
-        </h5>
         <form className="white" onSubmit={handleSubmit} onChange={validate}>
+          <h5 className="grey-text text-darken-3">Order</h5>
           <div className="row">
             <div className="input-field col s6">
               <DatePicker
                 id="orderDate_datepicker"
                 ref={refDatePicker}
                 options={{
+                  // since we manually init DatePicker, we don't need 'defaultDate' option
+                  // defaultDate: data.orderDate ? new Date(data.orderDate) : "",
                   setDefaultDate: true,
                   autoClose: true,
                   onClose: function() {

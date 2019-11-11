@@ -8,6 +8,10 @@ import SignUp from "./components/auth/SignUp";
 import CreateProject from "./components/projects/CreateProject";
 import TestApp from "./components/test/TestApp";
 import CreateOrder from "./components/orders/CreateOrder";
+// import OrderDetails from "./components/orders/OrderDetails";
+import OrderDetails from "./components/orders/OrderDetails";
+import LoadWithHooks from "./components/test/LoadWithHooks";
+import LoadWithHooks2 from "./components/test/LoadWithHooks2";
 
 class App extends Component {
   render() {
@@ -23,6 +27,10 @@ class App extends Component {
             <Route path="/create" component={CreateProject} />
             <Route path="/test" component={TestApp} />
             <Route path="/createorder" component={CreateOrder} />
+            <Route path="/order/:id" component={OrderDetails} />
+
+            <Route path="/loadwithhooks" component={LoadWithHooks} />
+            <Route path="/loadwithhooks2" component={LoadWithHooks2} />
           </Switch>
         </div>
       </BrowserRouter>
