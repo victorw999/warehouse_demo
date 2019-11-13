@@ -20,7 +20,7 @@ class ItemList extends Component {
   // adding item from AddItemForm.js
   addItem = newItem => {
     let skuEntered = newItem[0].trim(); // receiving data from AddItemForm.js
-    let qtyEntered = parseInt(newItem[1]);
+    let qtyEntered = parseInt(newItem[1], 10);
     let skuExistsFlag = false;
 
     // check if SKU already been entered,  if sku already exists in array, accrue qty

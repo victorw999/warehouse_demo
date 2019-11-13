@@ -1,6 +1,6 @@
 // this file is started using OrderList.js as template
 
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 // import OrderSummary from "./OrderSummary";
 // import { Link } from "react-router-dom";
 
@@ -11,7 +11,7 @@ import useDataApi from "./useDataApi";
 
 const StyleList = ({ orders }) => {
   // useReducer: custom hook
-  const [{ data, isLoading, isError }, updateData] = useDataApi(orders);
+  const [{ data }, updateData] = useDataApi(orders);
 
   // use ref to capture the lastest REF: https://overreacted.io/a-complete-guide-to-useeffect/
 
@@ -20,8 +20,11 @@ const StyleList = ({ orders }) => {
 
   // initialize array
   useEffect(() => {
+    console.log(Math.floor(Date.now() / 1000), " 'data' has been changed...");
     if (data && Array.isArray(data)) {
       // need to check if it's an array because if useDataApi have not fetch the "orders", it'll return the default obj
+
+      updateData(data); // force useDataApi to update its content w/ the most recent 'orders'
 
       let newarray = [];
       for (var order of data) {
@@ -29,7 +32,8 @@ const StyleList = ({ orders }) => {
           newarray.push({
             sku: item.sku,
             qty: item.quantity,
-            oid: order.amzId
+            oid: order.amzId,
+            key: item.key
           });
         }
       }
@@ -37,25 +41,6 @@ const StyleList = ({ orders }) => {
     }
   }, [data]);
 
-  // update array when orders being modified
-  useLayoutEffect(() => {
-    // console.log("detecting orders has been changed....");
-    if (data && Array.isArray(data)) {
-      // need to check if it's an array because if useDataApi have not fetch the "orders", it'll return the default obj
-
-      let newarray = [];
-      for (var order of data) {
-        for (var item of order.itemlist) {
-          newarray.push({
-            sku: item.sku,
-            qty: item.quantity,
-            oid: order.amzId
-          });
-        }
-      }
-      setStyles(newarray);
-    }
-  }, [orders]);
   return (
     <div className="project-list section">
       <h5 className="card-title">By Styles</h5>
@@ -63,7 +48,7 @@ const StyleList = ({ orders }) => {
         {styles &&
           styles.map(style => {
             return (
-              <li>
+              <li key={style.key}>
                 {style.sku} {" - "} {style.qty} {" - "} {style.oid}
               </li>
             );

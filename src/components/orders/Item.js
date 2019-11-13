@@ -15,7 +15,7 @@ const Item = props => {
   };
 
   const handleRemoveClick = () => {
-    var index = parseInt(props.index);
+    var index = parseInt(props.index, 10);
     props.removeItem(index);
   };
 

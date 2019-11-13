@@ -1,6 +1,6 @@
 import React from "react";
 import OrderSummary from "./OrderSummary";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";

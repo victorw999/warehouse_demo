@@ -4,8 +4,7 @@
 /**
  * this is a custom hook for fetch/load data from the 'order' prop into state variable
  */
-import { useEffect, useReducer, useRef } from "react";
-import { CustomConsole } from "@jest/console";
+import { useEffect, useReducer } from "react";
 
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
@@ -13,6 +12,7 @@ const dataFetchReducer = (state, action) => {
       // console.log("ORDER_FULLY_LOADED");
       return { ...state, initFlag: true };
     case "UPDATE_DATA":
+      console.log("UPDATE_DATA");
       return { ...state, data: action.payload };
     case "FETCH_INIT":
       // console.log("FETCH_INIT");
@@ -81,7 +81,6 @@ const useDataApi = order => {
               if (!didCancel) {
                 dispatch({ type: "FETCH_SUCCESS", payload: result });
               }
-              // throw new Error("victor error !");
             })
             .catch(e => {
               console.error(e);

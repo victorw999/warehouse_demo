@@ -46,7 +46,11 @@ export const updateOrder = order => {
         });
       })
       .then(() => {
+        dispatch({ type: "UPDATE_ORDER", order });
         console.log("...finished update firestore");
+      })
+      .catch(err => {
+        dispatch({ type: "UPDATE_ORDER_ERROR", err });
       });
 
     // firestore

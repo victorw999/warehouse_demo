@@ -24,11 +24,12 @@ const SignedInLinks = props => {
                 floating
                 className="nav_dropdown_btn"
                 waves="light"
-                icon="add"
                 style={{
                   marginRight: "5px"
                 }}
-              />
+              >
+                <i className="material-icons"> add </i>
+              </Button>
             }
           >
             {/* <a href="/create">New Project</a>
@@ -50,11 +51,12 @@ const SignedInLinks = props => {
             floating
             className="nav_dropdown_btn"
             waves="light"
-            icon="insert_chart"
             style={{
               marginRight: "5px"
             }}
-          />
+          >
+            <i className="material-icons">insert_chart</i>
+          </Button>
         </li>
         <li>
           <button href="#" onClick={props.signOut} style={buttonStyle}>
@@ -77,7 +79,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SignedInLinks);
+export default connect(null, mapDispatchToProps)(SignedInLinks);

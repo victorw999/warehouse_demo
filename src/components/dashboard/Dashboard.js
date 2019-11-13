@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ProjectListByTime from "../projects/ProjectListByTime";
 import ProjectListByAuthor from "../projects/ProjectListByAuthor";
-import ToggleByAuthor from "../layout/ToggleByAuthor";
+// import ToggleByAuthor from "../layout/ToggleByAuthor";
 import Toggle2 from "../layout/Toggle2";
 import OrderList from "../orders/OrderList";
 import StyleList from "../orders/StyleList";
@@ -17,7 +17,7 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       // isProjectListByAuthor: false,
-      toggle2: false
+      toggle2: true
     };
   }
 
@@ -34,7 +34,7 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { orders, projects, auth, notifications } = this.props;
+    const { orders, auth, notifications } = this.props;
 
     if (!auth.uid) return <Redirect to="/signin" />;
     return (
@@ -68,7 +68,8 @@ class Dashboard extends Component {
         <div className="row">
           <div className="col s12 m6">
             {this.state.isProjectListByAuthor ? (
-              // since i'm connecting w/ firestoreConnect in child compoenet, i don't need to pass down the props here
+              // since i'm connecting w/ firestoreConnect in child compoenet,
+              // i don't need to pass down the props here
               // <ProjectListByAuthor projects={projects} />
               <ProjectListByAuthor />
             ) : (
@@ -90,7 +91,7 @@ const mapStateToProps = state => {
     projects: state.firestore.ordered.projects,
     auth: state.firebase.auth,
     notifications: state.firestore.ordered.notifications,
-    ordersOld: state.order.orders, // demo data frm 'reducers/orderReducer.js'
+    // ordersOld: state.order.orders, // demo data frm 'reducers/orderReducer.js'
     orders: state.firestore.ordered.orders
   };
 };
@@ -100,7 +101,7 @@ export default compose(
   firestoreConnect([
     {
       collection: "orders"
-      // orderBy: ["createdAt", "desc"]
+      // orderBy: ["itemlist", "desc"]
     },
     {
       collection: "notifications",

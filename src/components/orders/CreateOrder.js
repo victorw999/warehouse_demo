@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createOrder } from "../../store/actions/orderActions";
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
 import ItemList from "./ItemList";
 
-import moment from "moment";
+// import moment from "moment";
 import { DatePicker } from "react-materialize";
 
 // http://jsfiddle.net/are207L0/1/
