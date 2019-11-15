@@ -12,7 +12,7 @@ import CreateOrder from "./components/orders/CreateOrder";
 import OrderDetails from "./components/orders/OrderDetails";
 import LoadWithHooks from "./components/test/LoadWithHooks";
 import LoadWithHooks2 from "./components/test/LoadWithHooks2";
-
+import "./scss/base.scss";
 class App extends Component {
   render() {
     return (
