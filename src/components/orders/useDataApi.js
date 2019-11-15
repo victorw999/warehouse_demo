@@ -12,7 +12,7 @@ const dataFetchReducer = (state, action) => {
       // console.log("ORDER_FULLY_LOADED");
       return { ...state, initFlag: true };
     case "UPDATE_DATA":
-      console.log("UPDATE_DATA");
+      // console.log("UPDATE_DATA");
       return { ...state, data: action.payload };
     case "FETCH_INIT":
       // console.log("FETCH_INIT");

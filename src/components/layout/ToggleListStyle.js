@@ -6,17 +6,17 @@ const switchStyle = {
   padding: "2rem"
 };
 
-const Toggle2 = props => {
+const ToggleListStyle = props => {
   return (
     <span className="switch toggleByAuthor" style={switchStyle}>
       <label>
-        View by Order
+        View by Styles
         <input type="checkbox" onChange={props.handleToggle} />
         <span className="lever" />
-        View by Styles
+        View by Orders
       </label>
     </span>
   );
 };
 
-export default Toggle2;
+export default ToggleListStyle;

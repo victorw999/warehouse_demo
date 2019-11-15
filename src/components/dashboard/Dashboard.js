@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ProjectListByTime from "../projects/ProjectListByTime";
 import ProjectListByAuthor from "../projects/ProjectListByAuthor";
 // import ToggleByAuthor from "../layout/ToggleByAuthor";
-import Toggle2 from "../layout/Toggle2";
+import ToggleListStyle from "../layout/ToggleListStyle";
 import OrderList from "../orders/OrderList";
 import StyleList from "../orders/StyleList";
 
@@ -16,20 +16,13 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // isProjectListByAuthor: false,
-      toggle2: true
+      toggleListStyle: false
     };
   }
 
-  // handleToggleSortByAuthor = () => {
-  //   this.setState({
-  //     isProjectListByAuthor: !this.state.isProjectListByAuthor
-  //   });
-  // };
-
-  handleToggle2 = () => {
+  handleToggleListStyle = () => {
     this.setState({
-      toggle2: !this.state.toggle2
+      toggleListStyle: !this.state.toggleListStyle
     });
   };
 
@@ -48,17 +41,23 @@ class Dashboard extends Component {
           )}
         </div> */}
 
-        <div className="row center">
-          <Toggle2 handleToggle={this.handleToggle2} />
-          {this.state.toggle2 ? (
+        <div
+          className="row center valign-wrapper"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <ToggleListStyle
+            handleToggle={this.handleToggleListStyle}
+            style={{ margin: "auto" }}
+          />
+          {/* {this.state.toggleListStyle ? (
             <button className="btn-floating teal">teal</button>
           ) : (
             <button className="btn-floating red">red</button>
-          )}
+          )} */}
         </div>
 
         <div className="row center">
-          {this.state.toggle2 ? (
+          {this.state.toggleListStyle ? (
             <OrderList orders={orders} />
           ) : (
             <StyleList orders={orders} />

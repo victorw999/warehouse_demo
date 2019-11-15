@@ -102,7 +102,7 @@ const OrderDetail = props => {
     return (
       <div className="container">
         <h5 className="grey-text text-darken-3">
-          Order
+          Orders
           {isError && <span> Something is wrong ... </span>}
           {isLoading ? <span> Loading ... </span> : " "}
         </h5>
