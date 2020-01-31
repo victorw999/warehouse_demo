@@ -18,22 +18,15 @@ const SignedInLinks = props => {
 
         <li>
           <Dropdown
-            className="nav_dropdown"
+            className="nav_dropdown  "
             trigger={
-              <Button
-                floating
-                className="nav_dropdown_btn"
-                waves="light"
-                style={{
-                  marginRight: "5px"
-                }}
-              >
+              <Button floating className="nav_dropdown_btn" waves="light">
                 <i className="material-icons"> add </i>
               </Button>
             }
           >
             {/* <a href="/create">New Project</a>
-          <a href="/createorder">New Order</a> */}
+            <a href="/createorder">New Order</a> */}
             <NavLink to="/create">New Project</NavLink>
             <NavLink to="/createorder">New Order</NavLink>
           </Dropdown>
@@ -47,15 +40,8 @@ const SignedInLinks = props => {
           <NavLink to="/createorder">New Order</NavLink>
         </li> */}
         <li>
-          <Button
-            floating
-            className="nav_dropdown_btn"
-            waves="light"
-            style={{
-              marginRight: "5px"
-            }}
-          >
-            <i className="material-icons">insert_chart</i>
+          <Button floating className="nav_dropdown_btn" waves="light">
+            <i className="material-icons"> insert_chart </i>
           </Button>
         </li>
         <li>

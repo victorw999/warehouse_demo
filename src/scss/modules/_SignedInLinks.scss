@@ -1,0 +1,37 @@
+/* DROPDOWN: fix materialize icon and the parent nav don't have the same height */
+.nav_dropdown_btn.btn-floating {
+  margin-right: 5px;
+  .material-icons {
+    // line-height: 40px; /*  fix for floating btn */
+    line-height: unset;
+  }
+}
+.nav_dropdown_btn.btn {
+  .material-icons {
+    // line-height: 36px; /*  fix for regular btn */
+    line-height: unset;
+  }
+}
+
+/* DROPDOWN: increase width */
+.dropdown-content.nav_dropdown {
+  width: 150px !important;
+
+  // mod hover color
+  li a:hover {
+    background-color: color("teal", "darken-1");
+    color: white;
+  }
+}
+
+// override default: shift LOGO to left during 'small'
+
+nav .brand-logo {
+  @media #{$small-and-down} {
+    left: unset !important;
+    transform: unset !important;
+  }
+  @media only screen and (max-width: 333px) {
+    display: none !important;
+  }
+}

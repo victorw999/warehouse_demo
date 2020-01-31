@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useReducer } from "react";
 import { DatePicker } from "react-materialize";
 import { connect } from "react-redux";
-import ItemList from "./ItemList";
-import { updateOrder } from "../../store/actions/orderActions";
+import ItemList from "../ItemList";
+import { updateOrder } from "../../../store/actions/orderActions";
 
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
@@ -342,10 +342,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   firestoreConnect([
     {
       collection: "orders"

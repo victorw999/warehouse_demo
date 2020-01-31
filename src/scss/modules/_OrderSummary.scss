@@ -1,0 +1,50 @@
+.OrderSummary_row {
+  .itemlist {
+    background-color: unset !important;
+    padding: 0 !important;
+    border: none !important;
+
+    .item_qty {
+      padding: 0px 1rem;
+      font-weight: 900;
+    }
+    .status i {
+      font-size: 19px !important;
+      &.picking {
+        color: color("blue", "base");
+      }
+      &.pick_complete {
+        color: color("green", "base");
+      }
+    } // .status i
+  } // .itemlist
+
+  .actions_section {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 10rem;
+    @media #{$medium-and-down} {
+      height: 20rem;
+    }
+
+    // better make button into 2 rows so on mobile easy to click
+    .act_btn {
+      color: white;
+      width: 5rem;
+      height: 3rem;
+      margin: 0.3rem;
+      padding: 0;
+
+      // center
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      & i {
+        margin: 0;
+      }
+    }
+  } //actions_section
+} // end OrderSummary_row

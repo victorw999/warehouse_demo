@@ -74,7 +74,7 @@ const useDataApi = order => {
             if (order) {
               resolve(order);
             } else {
-              reject(" prop 'order' not ready ");
+              reject("useDataApi.js msg: prop 'order' not ready ");
             }
           })
             .then(result => {
@@ -89,7 +89,7 @@ const useDataApi = order => {
           if (!didCancel) {
             dispatch({ type: "FETCH_FAILURE" });
           }
-          console.error("fetch data error: ", error);
+          console.error("useDataApi.js msg: fetch data error: ", error);
         }
       };
       fetchData();

@@ -10,8 +10,8 @@ import React, { useState, useEffect } from "react";
 const isValid = (value, min, max) =>
   value !== "" &&
   value !== "-" &&
-  (min === undefined || value >= min) &&
-  (max === undefined || value <= max);
+  min !== undefined && value >= min &&
+  max !== undefined && value <= max;
 
 // const IntegerInput = ({ value, min, max, onChange }) => {
 const IntegerInput = ({ item, min, max, onChange }) => {

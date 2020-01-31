@@ -1,0 +1,45 @@
+.stafflist {
+  .collapsible-body {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .staff_header .name {
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .actions_section {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    // height: 10rem;
+    // better make button into 2 rows so on mobile easy to click
+    .act_btn {
+      color: white;
+      width: 3rem;
+      height: 3rem;
+      margin: 0.3rem;
+      padding: 0;
+
+      &.teal_before {
+        color: color("teal", "lighten-1");
+        border: color("teal", "lighten-1") 1px solid;
+
+        & .material-icons {
+          // float: unset !important;
+          // margin: 0;
+        }
+      }
+      &.teal_after {
+        color: transparent;
+        background-color: color("teal", "lighten-1");
+        border: color("teal", "lighten-1") 1px solid;
+        & .material-icons {
+          color: white;
+        }
+      }
+    }
+  } //actions_section
+}

@@ -9,9 +9,9 @@ class ConfirmDeletion extends Component {
         id="confirmDeletion"
         open={open}
         actions={actions}
-        header="Are you sure?"
+        header="Delete this order?"
       >
-        <div className="modal-content">
+        <div className="modal-content ">
           <p> Are you sure you want to delete '{name}'? </p>
         </div>
       </Modal>

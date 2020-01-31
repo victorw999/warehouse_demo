@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { createOrder } from "../../store/actions/orderActions";
-import { Redirect } from "react-router-dom";
-import ItemList from "./ItemList";
+import { createOrder } from "../../../store/actions/orderActions";
+// import { Redirect } from "react-router-dom";
+import ItemList from "../ItemList";
 
-import moment from "moment";
+// import moment from "moment";
 import { DatePicker } from "react-materialize";
 
 // http://jsfiddle.net/are207L0/1/
@@ -20,11 +20,17 @@ function isValidDate(d) {
 class CreateOrder extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
+      // init all fields to avoid the senerio where during firestore update there's a "missing field" err
       amzId: "",
       orderDate: new Date(),
-      itemlist: []
+      itemlist: [],
+      buyer: "",
+      shipAddr: "",
+      shipCity: "",
+      shipState: "",
+      shipZip: "",
+      shipOption: ""
     };
     this.validate = this.validate.bind(this);
     this.refDatePicker = React.createRef();
@@ -43,15 +49,15 @@ class CreateOrder extends Component {
      * passing local state into action
      * it will run the func in orderActions.js
      */
+
+    // // clear all msg in items
+    // let newlist = this.state.itemlist.map(item => {
+    //   return { ...item, msg: "" };
+    // });
+    // this.setState({ ...this.state, itemlist: newlist });
+
     this.props.createOrder(this.state);
     this.props.history.push("/"); // redirect to homepage after finished creating
-  };
-
-  // Itemlist will call this func when its state has been changed.
-  updateItemListInOrder = newItemList => {
-    this.setState({
-      itemlist: newItemList
-    });
   };
 
   componentDidMount = () => {
@@ -63,8 +69,7 @@ class CreateOrder extends Component {
   };
 
   componentDidUpdate = () => {
-    // console.log("CreateOrder.js:  " + JSON.stringify(this.state.itemlist));
-    console.log(this.state);
+    // console.log(this.state);
   };
 
   validate = () => {
@@ -88,6 +93,19 @@ class CreateOrder extends Component {
     }
   };
 
+  /**
+   * updateList: provide prop function to handle children component Itemlist.js 's addItem(), removeItem()
+   *  function defintion in : CreateOrder.js, OrderDeatil.js
+   *  1. add item
+   *  2. add item w/ same sku
+   *  3. remove item
+   */
+  updateList = newlist => {
+    this.setState({
+      itemlist: newlist
+    });
+  };
+
   /*
   REF: add item dynamically
   https://codepen.io/antonietta/pen/KzxxWN
@@ -97,7 +115,7 @@ class CreateOrder extends Component {
   render() {
     // const { auth } = this.props;
     // if (!auth.uid) return <Redirect to="/signin" />;
-    console.log(this.refDatePicker.current);
+    // console.log(this.refDatePicker.current);
     return (
       <div className="container">
         <form
@@ -119,11 +137,6 @@ class CreateOrder extends Component {
                   console.log(this.date);
                 }
               }}
-              // onChange={ e => {
-              //   this.setState({
-              //     orderDate: e // e is the date in String
-              //   });
-              // } }
               onChange={this.handleDatePicker.bind(this)}
             />
           </div>
@@ -190,21 +203,10 @@ class CreateOrder extends Component {
               <label htmlFor="shipOption">shipOption</label>
             </div>
           </div>
-
-          {/* <div className="input-field">
-            <textarea
-              id="buyer"
-              // className="materialize-textarea"
-              onChange={this.handleChange.bind(this)}
-            />
-            <label htmlFor="buyer">buyer</label>
-          </div> */}
-
           <div className="input-field">
             <ItemList
               itemlist={this.state.itemlist}
-              updateItemListInOrder={this.updateItemListInOrder.bind(this)}
-              // provide a prop func 'updateItemListInOrder()' for ItemList.js to update current component's state
+              updateList={this.updateList.bind(this)}
             />
           </div>
 

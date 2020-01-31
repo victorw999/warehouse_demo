@@ -1,3 +1,7 @@
+# Pacico Warehouse Shipping System for Amazon 2019
+
+This project to to manage & track warehouse packing/shipping tasks in order to streamline the operation for online orders.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

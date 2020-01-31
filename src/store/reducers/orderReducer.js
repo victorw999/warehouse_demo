@@ -51,6 +51,13 @@ const orderReducer = (state = initState, action) => {
       console.log("update order error", action.err);
       return state;
 
+    case "UPDATE_ORDER_ITEM":
+      console.log("update order's item", action.order);
+      return state;
+    case "UPDATE_ORDER_ITEM_ERROR":
+      console.log("update order's item error", action.err);
+      return state;
+
     default:
       return state;
   }

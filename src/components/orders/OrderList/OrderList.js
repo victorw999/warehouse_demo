@@ -6,8 +6,12 @@ import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 
-// const deleteOrder =
-const OrderList = ({ orders }) => {
+const OrderList = ({
+  orders,
+  handleCreatePickTask,
+  handleDeletePickTask,
+  deleteMultiPickTasks
+}) => {
   return (
     <div className="project-list section">
       <h5 className="card-title">Orders</h5>
@@ -22,7 +26,15 @@ const OrderList = ({ orders }) => {
         <tbody>
           {orders &&
             orders.map(order => {
-              return <OrderSummary order={order} key={order.id} />;
+              return (
+                <OrderSummary
+                  order={order}
+                  key={order.id}
+                  handleCreatePickTask={handleCreatePickTask}
+                  handleDeletePickTask={handleDeletePickTask}
+                  deleteMultiPickTasks={deleteMultiPickTasks}
+                />
+              );
             })}
         </tbody>
       </table>

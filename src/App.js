@@ -7,12 +7,13 @@ import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
 import CreateProject from "./components/projects/CreateProject";
 import TestApp from "./components/test/TestApp";
-import CreateOrder from "./components/orders/CreateOrder";
+import CreateOrder from "./components/orders/CreateOrder/CreateOrder";
 // import OrderDetails from "./components/orders/OrderDetails";
-import OrderDetails from "./components/orders/OrderDetails";
+import OrderDetails from "./components/orders/OrderDetails/OrderDetails";
 import LoadWithHooks from "./components/test/LoadWithHooks";
 import LoadWithHooks2 from "./components/test/LoadWithHooks2";
-import "./scss/base.scss";
+import "materialize-css/dist/css/materialize.min.css";
+
 class App extends Component {
   render() {
     return (
