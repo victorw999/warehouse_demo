@@ -60,69 +60,14 @@ export const createPickTask = task => {
 
     // commit task, then start updating orders
     batch.commit().then(() => {
-      /**
-       * transaction starts
-       */
-      tempTasks.forEach(picktask_item => {
-        if (picktask_item.msg === "note_trigger_not_update_order") {
-          var orderRef = firestore
-            .collection("orders")
-            .doc(`${picktask_item.order_docId}`);
-          return firestore
-            .runTransaction(transaction => {
-              /**
-               * This code may get re-run multiple times if there are conflicts.
-               */
-              return transaction.get(orderRef).then(doc => {
-                if (!doc.exists) {
-                  throw "vic: Document does not exist!";
-                }
-                var newItemList = [...doc.data().itemlist];
-                newItemList = newItemList.map(i => {
-                  if (picktask_item.key === i.key) {
-                    return {
-                      ...i,
-                      pickId: picktask_item.id, // for delete operation,
-                      status: picktask_item.status,
-                      picker: picktask_item.authorFirstName
-                    };
-                  } else {
-                    return i;
-                  }
-                }); // end: newItemList map loop
-                /**
-                 * update "order"
-                 */
-                transaction.update(orderRef, {
-                  ...doc.data(),
-                  itemlist: newItemList
-                });
-              }); // end: transaction.get()
-              /**
-               * if want to chain another, here is the tutorial:  ref: https://stackoverflow.com/a/57653880/5844090
-               */
-            }) // end: runTransaction()
-            .then(() => {
-              console.log("Transaction: successfully updated 'order'  ");
-            })
-            .catch(function(error) {
-              console.log("Transaction failed: ", error, picktask_item.sku);
-            });
-        } // if "note_trigger_not_update_order"
-        else {
-          /**
-           * picktask was created frm StyleList.js
-           * regular creating picktask, skip above transaction, wait for triggers to update order
-           */
-        }
-      }); // end forEach looping itemlist
+      updateOrdersCollectionAfterTasksAction(firestore, tempTasks, "create");
     }); // batch.commit()
   };
 };
 
 /**
  *
- *  CANCEL
+ *  CANCEL, delete indivual ones, then this'll trigger cloud func
  */
 export const deletePickTask = pickId => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -158,7 +103,6 @@ export const deleteMultiPickTasks = list => {
     const authorId = getState().firebase.auth.uid;
 
     var batch = firestore.batch();
-
     // delete tasks
     list.forEach(picktask_item => {
       var newRef = firestore
@@ -169,16 +113,9 @@ export const deleteMultiPickTasks = list => {
 
     // commit task, then start updating orders
     batch.commit().then(() => {
-      console.log("all tasks deleted");
-      /**
-       *
-       *   so far the deleting batch works
-       *    next
-       *    need to implement transaction to update orders
-       *
-       *
-       */
-    }); // batch.commit()
+      updateOrdersCollectionAfterTasksAction(firestore, list, "delete");
+    });
+    // batch.commit()
   };
 };
 
@@ -233,4 +170,74 @@ export const updatePickTask = (pickId, newStatus) => {
         // dispatch({ type: "DELETE_PICKTASK_ERROR", err });
       });
   };
+};
+
+/**
+ * re-usable func to update 'orders'
+ * via firestore "transaction"
+ */
+
+const updateOrdersCollectionAfterTasksAction = (firestore, list, type) => {
+  /**
+   * transaction starts
+   */
+  list.forEach(picktask_item => {
+    if (picktask_item.msg === "note_trigger_not_update_order") {
+      var orderRef = firestore
+        .collection("orders")
+        .doc(`${picktask_item.order_docId}`);
+
+      return firestore
+        .runTransaction(transaction => {
+          /**
+           * This code may get re-run multiple times if there are conflicts.
+           */
+          return transaction.get(orderRef).then(doc => {
+            if (!doc.exists) {
+              throw "vic: Document does not exist!";
+            }
+            var newItemList = [...doc.data().itemlist];
+            newItemList = newItemList.map(i => {
+              if (picktask_item.key === i.key) {
+                return {
+                  ...i,
+                  pickId: type === "delete" ? "" : picktask_item.id, // for delete operation,
+                  status: type === "delete" ? "" : picktask_item.status,
+                  picker: type === "delete" ? "" : picktask_item.authorFirstName
+                };
+              } else {
+                return i;
+              }
+            }); // end: newItemList map loop
+            /**
+             * update "order"
+             */
+
+            transaction.update(orderRef, {
+              ...doc.data(),
+              itemlist: newItemList
+            });
+          }); // end: transaction.get()
+          /**
+           * if want to chain another, here is the tutorial:  ref: https://stackoverflow.com/a/57653880/5844090
+           */
+        }) // end: runTransaction()
+        .then(() => {
+          console.log("Transaction: updated 'order' for ", picktask_item.sku);
+        })
+        .catch(function(error) {
+          console.log("Transaction failed: ", error, picktask_item.sku);
+        });
+    } // if "note_trigger_not_update_order"
+    else {
+      /**
+       * picktask was created frm StyleList.js
+       * regular creating picktask, skip above transaction, wait for triggers to update order
+       */
+    }
+  }); // end forEach looping itemlist
+
+  /**
+   * transaction end
+   */
 };

@@ -188,13 +188,21 @@ const OrderSummary = props => {
             handleClick={() => {
               if (order.itemlist) {
                 // filter out item whose status is 'picking'
-                var picktask_itemlist = order.itemlist.filter(f => {
-                  if (f.status === "picking") {
-                    return true;
-                  } else {
-                    return false;
-                  }
-                });
+                var picktask_itemlist = order.itemlist
+                  .filter(f => {
+                    if (f.status === "picking") {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  })
+                  .map(x => {
+                    return {
+                      ...x,
+                      order_docId: order.docId,
+                      msg: "note_trigger_not_update_order"
+                    };
+                  });
                 deleteMultiPickTasks(picktask_itemlist);
               }
             }}

@@ -285,7 +285,15 @@ exports.pickTaskDeleted = functions.firestore
   .onDelete(doc => {
     const picktask = { ...doc.data(), id: doc.id };
     console.log("pickTaskDeleted2 -->", picktask);
-    return updateItemStatusOnDelete2(picktask);
+    if (picktask.msg === "note_trigger_not_update_order") {
+      return new Promise((resolve, reject) => {
+        if (true) {
+          resolve("Do NOT need to update orders on DELETE!");
+        }
+      });
+    } else {
+      return updateItemStatusOnDelete2(picktask);
+    }
   });
 
 /**
