@@ -1,6 +1,18 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
+const db = admin.firestore();
+
+/** children files */
+const projectOnCreate = require("./projectOnCreate.js");
+const jobOnCreate = require("./jobOnCreate.js");
+
+/**
+ * PROJRECT CREATE
+ */
+exports.projectCreated = functions.firestore
+  .document("projects/{projectId}")
+  .onCreate(projectOnCreate);
 
 const createNotification = notification => {
   return admin
@@ -16,7 +28,6 @@ const createNotification = notification => {
 };
 
 // change Data outside the trigger event //REF: https://bit.ly/34gL32J
-const db = admin.firestore();
 
 /**
  *  UPDATE ORDER @ PICKTAST CREATED
@@ -150,14 +161,13 @@ const updateItemStatusOnCreate7 = picktask => {
             ...order_itemlist[i],
             status: picktask.status, // update "order" collection frm "picktasks" collection
             picker: picktask.authorFirstName,
-            pickId: picktask.id // for delete operation
+            pickId: picktask.id, // for delete operation
+            msg: "" // remove 'skip trigger' msg if it had one.
           };
           output = `+++ ${picktask.sku} - pickid: ${picktask.id}`;
           break;
         }
       }
-
-      /** moved from here */
 
       return new Promise((resolve, reject) => {
         // check if order's updated,
@@ -194,6 +204,14 @@ const updateItemStatusOnCreate7 = picktask => {
 };
 
 /**
+ *  UPDATE ORDER @ PICKTASK ON_UPDATE
+ *
+ */
+const updateItemStatusOnUpdate = picktask => {
+  // need to implement
+};
+
+/**
  *  UPDATE ORDER @ PICKTAST DELETED
  */
 const updateItemStatusOnDelete2 = picktask => {
@@ -213,8 +231,9 @@ const updateItemStatusOnDelete2 = picktask => {
             return {
               ...item,
               status: "", // reset
-              picker: "", // reset
-              pickId: "" // reset
+              authorFirstName: "", // reset
+              pickId: "", // reset
+              pickerId: "" // reset
             };
           } else {
             return item;
@@ -240,21 +259,6 @@ const updateItemStatusOnDelete2 = picktask => {
 };
 
 /**
- * PROJRECT CREATE
- */
-exports.projectCreated = functions.firestore
-  .document("projects/{projectId}")
-  .onCreate(doc => {
-    const project = doc.data();
-    const notification = {
-      content: "Added a new project",
-      user: `${project.authorFirstName} ${project.authorLastName}`,
-      time: admin.firestore.FieldValue.serverTimestamp()
-    };
-    return createNotification(notification);
-  });
-
-/**
  * PICKTASK CREATED
  */
 exports.pickTaskCreated = functions.firestore
@@ -264,14 +268,13 @@ exports.pickTaskCreated = functions.firestore
     // Match value of array from db object in Firebase Cloud Functions
     doc => {
       const picktask = { ...doc.data(), id: doc.id };
-      if (picktask.msg === "note_trigger_not_update_order") {
-        // OrderSummary.js: special case, don't need to invoke trigger to update order
+      if (picktask.msg === "skip_cloud_trigger") {
+        console.log("msg: ", picktask.msg, picktask.key);
         return new Promise((resolve, reject) => {
-          if (true) {
-            resolve("Do NOT need to update orders!");
-          }
+          resolve("Do NOT need to update orders!");
         });
       } else {
+        console.log("msg:  empty");
         return updateItemStatusOnCreate7(picktask);
       }
     }
@@ -284,11 +287,11 @@ exports.pickTaskDeleted = functions.firestore
   .document("picktasks/{picktask}")
   .onDelete(doc => {
     const picktask = { ...doc.data(), id: doc.id };
-    console.log("pickTaskDeleted2 -->", picktask);
-    if (picktask.msg === "note_trigger_not_update_order") {
+    if (picktask.msg === "skip_cloud_trigger") {
+      console.log("msg: ", picktask.msg);
       return new Promise((resolve, reject) => {
         if (true) {
-          resolve("Do NOT need to update orders on DELETE!");
+          resolve("skip_cloud_trigger");
         }
       });
     } else {
@@ -299,14 +302,26 @@ exports.pickTaskDeleted = functions.firestore
 /**
  * PICKTASK updated: completed
  */
-exports.pickTaskCompleted = functions.firestore
+exports.pickTaskUpdated = functions.firestore
   .document("picktasks/{picktask}")
   .onUpdate((change, context) => {
     const newValue = change.after.data();
     const picktask = { ...newValue, id: change.after.ref.id };
     // console.log("---:: change.after.ref", change.after.ref);
     // console.log("---:: change.after.ref.id", change.after.ref.id);
-    return updateItemStatusOnCreate5(picktask);
+
+    if (picktask.msg === "skip_cloud_trigger") {
+      console.log("msg: ", picktask.msg);
+      return new Promise((resolve, reject) => {
+        if (true) {
+          resolve("skip_cloud_trigger");
+        }
+      });
+    } else {
+      return updateItemStatusOnCreate7(picktask);
+    }
+    // need to implement
+    // return updateItemStatusOnUpdate(picktask);
   });
 
 /**
@@ -325,7 +340,13 @@ exports.userJoined = functions.auth.user().onCreate(user => {
         user: `${newUser.firstName} ${newUser.lastName}`,
         time: admin.firestore.FieldValue.serverTimestamp()
       };
-
       return createNotification(notification);
     });
 });
+
+/**
+ * JOB CREATE
+ */
+exports.jobCreated = functions.firestore
+  .document("jobs/{jobId}")
+  .onCreate(jobOnCreate);

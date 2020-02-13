@@ -1,4 +1,7 @@
 .OrderSummary_row {
+  .itemsdetail {
+    text-transform: capitalize;
+  } //itemsdetail
   .itemlist {
     background-color: unset !important;
     padding: 0 !important;
@@ -17,6 +20,11 @@
         color: color("green", "base");
       }
     } // .status i
+    .picker_init {
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      margin-left: 0.2rem;
+    }
   } // .itemlist
 
   .actions_section {

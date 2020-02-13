@@ -136,7 +136,7 @@ export const createOrder = order => {
       .then(docRef => {
         // console.log("Document written with ID: ", docRef.id);
         docRef.get().then(snap => {
-          docRef.update({ ...snap.data(), docId: docRef.id });
+          // docRef.update({ ...snap.data(), docId: docRef.id });
           // console.log("doc id added to order");
         });
       })

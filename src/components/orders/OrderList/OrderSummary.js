@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { deleteOrder } from "../../../store/actions/orderActions";
 import { Link } from "react-router-dom";
@@ -11,9 +11,33 @@ const OrderSummary = props => {
     order,
     handleCreatePickTask,
     handleDeletePickTask,
-    deleteMultiPickTasks
+    deleteMultiPickTasks,
+    currentUser,
+    handleCreateJob
   } = props; // need 'props' variable for dispatch actions
+
   const [modalOpen, setModalOpen] = useState(false); // hooks for Modal ConfirmDeletion
+  const [btnStatus, setBtnStatus] = useState("neutral");
+  const [showPicker, setshowPicker] = useState(false);
+  useEffect(() => {
+    if (btnStatus === "deleting_pick") {
+      if (checkIfStatusCleared(order.itemlist)) {
+        setBtnStatus("neutral");
+      }
+    }
+    // if (btnStatus === "creating_pick") {
+    //   if (checkIfStatusCleared(order.itemlist)) {
+    //     setBtnStatus("neutral");
+    //   }
+    // }
+
+    /** decide if should display authorFirstName */
+    if (shouldShowPicker(order.itemlist)) {
+      setshowPicker(true);
+    } else {
+      setshowPicker(false);
+    }
+  }, [order.itemlist]);
 
   const modalYes = () => {
     props.deleteOrder(order); //Send 'order' props to Action Creator 'deleteOrder', which will extract the doc.id necessary for delete operation
@@ -34,10 +58,16 @@ const OrderSummary = props => {
     } else if (status === "pick_complete") {
       return (
         <>
-          {/* <i className="material-icons green white-text">directions_run</i> */}
-          <i className="material-icons orange-text">warning</i>
           <i className="fas fa-walking picking"></i>
           <i className="far fa-check-circle picking"></i>
+        </>
+      );
+    } else {
+      return (
+        <>
+          {/* <i className="material-icons green white-text">directions_run</i> */}
+          <i className="material-icons orange-text">warning</i>
+
           <i className="fas fa-box-open pick_complete"></i>
           <i className="far fa-check-circle pick_complete"></i>
         </>
@@ -64,6 +94,58 @@ const OrderSummary = props => {
       if (result_status.length === 1) return result_status[0];
     }
     return "";
+  };
+
+  /**
+   *  decide what to display on top of list, for picker(s)
+   */
+  const getItemListPickers = itemlist => {
+    if (itemlist) {
+      if (shouldShowPicker(itemlist)) {
+        return "shared";
+      } else {
+        let picker = itemlist[0].picker ? itemlist[0].picker : "";
+        return picker;
+      }
+    } else {
+      return "";
+    }
+  };
+
+  const checkIfStatusCleared = list => {
+    var currentUserList = list.filter(x => x.authorFirstName === currentUser);
+    if (currentUserList.some(i => i.status !== "")) {
+      // there's at least 1 status not cleared
+      return false;
+    }
+    return true;
+  };
+
+  /**
+   *
+   * this func is used to decide wheather to display picker by the side of item
+   * packer will not be displayed on the side,
+   * there should be only 1 packer for each list,
+   * therefore, it'll be displayed on top of the list
+   */
+  const shouldShowPicker = itemlist => {
+    /**
+     * 1. item is either in "pick" status or "pack" status, or "no status"
+     * 2. there could also be a senario: in a list, some item is "pick" status, some is "pack" status
+     * 3. no matter what stage this list is current on (pick or pack)
+     *    if there're multiple pickers, we need to display them
+     */
+    if (itemlist) {
+      let picker_arr = itemlist.map(i => i.picker);
+      if (picker_arr.length < 2) {
+        return false;
+      } else {
+        let result = picker_arr.every(p => p === picker_arr[0]);
+        return !result;
+      }
+    } else {
+      return false;
+    }
   };
 
   return (
@@ -99,7 +181,13 @@ const OrderSummary = props => {
           {order.shipState + " " + order.shipZip}
         </span>
       </td>
-      <td style={{ whiteSpace: "pre-line" }}>
+      <td className="itemsdetail">
+        <span className="teal-text itemlistpickers">
+          {getItemListPickers(order.itemlist)}{" "}
+        </span>
+        <span className="teal-text orderstatus">
+          {checkAllStatus(order.itemlist)}
+        </span>
         <ul className="collection" style={{ border: "none" }}>
           {order.itemlist &&
             order.itemlist.map(item => {
@@ -114,6 +202,9 @@ const OrderSummary = props => {
                   </span>
                   <span className="status valign-wrapper">
                     {getStatusIcon(item.status)}
+                  </span>
+                  <span className="picker_init">
+                    {showPicker ? item.picker_init : ""}
                   </span>
                 </li>
               );
@@ -141,11 +232,14 @@ const OrderSummary = props => {
         */}
         {checkAllStatus(order.itemlist) === "picking" ? (
           ""
+        ) : btnStatus === "deleting_pick" ? (
+          ""
         ) : (
           <LoaderButton
             btnName={"PICK"}
             btnFormat={"btn-flat grey lighten-2 teal-text act_btn"}
             handleClick={() => {
+              // setBtnStatus("creating_pick");
               if (order.itemlist) {
                 // filter out no-status items, so item already have status, cannot be re-tasked
                 var picktask_itemlist = order.itemlist.filter(f => {
@@ -162,11 +256,17 @@ const OrderSummary = props => {
                     ...i,
                     oid: order.amzId,
                     buyer: order.buyer,
-                    order_docId: order.docId,
-                    msg: "note_trigger_not_update_order" // add to skip trigger
+                    order_docId: order.id,
+                    msg: "skip_cloud_trigger" // add to skip trigger
                   };
                 });
-                handleCreatePickTask({ itemlist: picktask_itemlist });
+                // handleCreatePickTask({ itemlist: picktask_itemlist });
+                console.log("picktask_itemlist ", picktask_itemlist);
+                handleCreateJob(
+                  picktask_itemlist,
+                  "createPickTask",
+                  "items_from_same_order"
+                );
               }
             }}
           />
@@ -175,17 +275,15 @@ const OrderSummary = props => {
         {/* 
             CANCEL PICK BUTTON
         */}
-        {checkAllStatus(order.itemlist) === "picking" ? (
-          // <button className="">
-          //   <i className="material-icons white-text">cancel</i> Pick
-          // </button>
-
+        {checkAllStatus(order.itemlist) === "picking" ||
+        btnStatus === "deleting_pick" ? (
           <LoaderButton
             btnName={"PICK"} // cancel pick
             btnFormat={"btn-flat red act_btn"}
             hasIcon={true}
             icon={"cancel"}
             handleClick={() => {
+              setBtnStatus("deleting_pick");
               if (order.itemlist) {
                 // filter out item whose status is 'picking'
                 var picktask_itemlist = order.itemlist
@@ -199,11 +297,15 @@ const OrderSummary = props => {
                   .map(x => {
                     return {
                       ...x,
-                      order_docId: order.docId,
-                      msg: "note_trigger_not_update_order"
+                      order_docId: order.id
                     };
                   });
-                deleteMultiPickTasks(picktask_itemlist);
+                // deleteMultiPickTasks(picktask_itemlist);
+                handleCreateJob(
+                  picktask_itemlist,
+                  "deletePickTask",
+                  "items_from_same_order"
+                );
               }
             }}
           />

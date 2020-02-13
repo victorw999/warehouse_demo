@@ -9,6 +9,7 @@ import {
   updatePickTask,
   deleteMultiPickTasks
 } from "../../store/actions/taskActions";
+import { createJob } from "../../store/actions/jobActions";
 import { createNotification } from "../../store/actions/noteActions";
 import Notifications from "./Notifications";
 import { connect } from "react-redux";
@@ -18,13 +19,6 @@ import { Redirect } from "react-router-dom";
 import { Tabs, Tab } from "react-materialize";
 
 class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toggleListStyle: false
-    };
-  }
-
   handleCreatePickTask = task => {
     this.props.createPickTask(task); // call dispatch method from mapDispatchToProps @ line 104
   };
@@ -47,12 +41,12 @@ class Dashboard extends Component {
     this.props.createNotification(content);
   };
 
-  // handleNoInventory = content => {
-  //   this.props.notifyNoInventory(content);
-  // };
+  handleCreateJob = (job, jobType, flag) => {
+    this.props.createJob(job, jobType, flag);
+  };
 
   render() {
-    const { orders, auth, notifications, picktasks } = this.props;
+    const { orders, auth, notifications, picktasks, profile } = this.props;
 
     if (!auth.uid) return <Redirect to="/signin" />;
     return (
@@ -104,9 +98,11 @@ class Dashboard extends Component {
                  **********/}
                 <OrderList
                   orders={orders}
+                  currentUser={profile.firstName}
                   handleCreatePickTask={this.handleCreatePickTask}
                   handleDeletePickTask={this.handleDeletePickTask}
                   deleteMultiPickTasks={this.deleteMultiPickTasks}
+                  handleCreateJob={this.handleCreateJob}
                 />
               </div>
               <div className="col s12 m12 l4 left-align ">
@@ -147,12 +143,30 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => {
   return {
-    projects: state.firestore.ordered.projects,
+    // projects: state.firestore.ordered.projects,
     auth: state.firebase.auth,
     notifications: state.firestore.ordered.notifications,
-    // ordersOld: state.order.orders, // demo data frm 'reducers/orderReducer.js'
-    orders: state.firestore.ordered.orders,
-    picktasks: state.firestore.ordered.picktasks
+    // orders: state.firestore.ordered.orders, // this line cause duplication
+    /**
+     * "state.firestore.ordered.orders" caused duplication when i add/edit new documents,
+     * REF: https://github.com/prescottprue/redux-firestore/issues/254#issuecomment-560115309
+     * solution: use "state.firestore.data.orders" instead of "state.firestore.ordered.orders"
+     */
+    orders: (() => {
+      // convert the object into array with doc id injected
+      let odrObj = state.firestore.data.orders;
+      let odrArr =
+        odrObj &&
+        Object.keys(odrObj).map(key => {
+          return {
+            ...odrObj[key],
+            id: key
+          };
+        });
+      return odrArr;
+    })(),
+    picktasks: state.firestore.ordered.picktasks,
+    profile: state.firebase.profile
   };
 };
 
@@ -164,7 +178,8 @@ const mapDispatchToProps = dispatch => {
     completePickTask: task => dispatch(completePickTask(task)),
     updatePickTask: (task, newStatus) =>
       dispatch(updatePickTask(task, newStatus)),
-    createNotification: content => dispatch(createNotification(content))
+    createNotification: content => dispatch(createNotification(content)),
+    createJob: (job, jobType, flag) => dispatch(createJob(job, jobType, flag))
   };
 };
 
@@ -172,8 +187,8 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   firestoreConnect([
     {
-      collection: "orders"
-      // orderBy: ["itemlist", "desc"]
+      collection: "orders",
+      orderBy: ["orderDate", "desc"]
     },
     {
       collection: "notifications",

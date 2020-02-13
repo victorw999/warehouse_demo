@@ -1,0 +1,33 @@
+// https://www.csvjson.com/csv2json
+// use this to convert order report to jason
+/**
+
+*/
+{
+  "doc_order1": {
+    "amzId": "",
+    "order-item-id": "", // no need to include these, since i presuem all skus in order are diff
+    "orderDate": "",
+    "buyer": "Pacico Inc.",
+    "ship": {
+      "recipient": "",
+      "addr1": "17528 Rowland Street",
+      "addr2": "suiet A",
+      "addr3": "",
+      "city": "City of Industry",
+      "state": "CA",
+      "zip": "91748",
+      "service-level": ""
+    },
+    "collection_itemlist": {
+      "item1": {
+        "style": "1342",
+        "sku": "1342-RED-XL",
+        "qty": 12,
+        "picker": "mario",
+        "pid": "pid-1415",
+        "status": "picking"
+      }
+    }
+  }
+}

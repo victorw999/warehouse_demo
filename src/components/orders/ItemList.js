@@ -6,7 +6,6 @@ class ItemList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // itemlist: this.props.itemlist ? this.props.itemlist : [],
       qtyMin: 1, // set input floor
       qtyMax: 100 // set input ceiling
     };
@@ -19,9 +18,9 @@ class ItemList extends Component {
 
   // adding item from AddItemForm.js
   addItem = newItem => {
-    let skuEntered = newItem[0].trim(); // receiving data from AddItemForm.js
-    let qtyEntered = parseInt(newItem[1], 10);
-    let skuExistsFlag = false;
+    let skuEntered = newItem.sku;
+    let qtyEntered = parseInt(newItem.qty, 10);
+    let skuExists = false;
 
     // check if SKU already been entered,  if sku already exists in array, accrue qty
     var newList = this.props.itemlist.map(item => {
@@ -29,8 +28,8 @@ class ItemList extends Component {
         newMsg = "";
       if (item.sku === skuEntered) {
         let sum = qtyEntered + item.quantity;
-        newQty = sum < this.state.qtyMax ? sum : this.state.qtyMax; // new qty not exceeding qtyMax (preset qty ceiling)
-        skuExistsFlag = true;
+        newQty = sum < this.state.qtyMax ? sum : this.state.qtyMax; // (preset qty ceiling)
+        skuExists = true;
         newMsg =
           sum < this.state.qtyMax
             ? ""
@@ -43,7 +42,7 @@ class ItemList extends Component {
     });
 
     // find index of obj in array:  let matchingIndex = currentArray.findIndex(item => item.sku === skuEntered);
-    if (skuExistsFlag === true) {
+    if (skuExists === true) {
       this.props.updateList(newList);
     } else {
       let timestamp = new Date().getTime(); //generate an unique key

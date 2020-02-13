@@ -10,7 +10,9 @@ const OrderList = ({
   orders,
   handleCreatePickTask,
   handleDeletePickTask,
-  deleteMultiPickTasks
+  deleteMultiPickTasks,
+  currentUser,
+  handleCreateJob
 }) => {
   return (
     <div className="project-list section">
@@ -33,6 +35,8 @@ const OrderList = ({
                   handleCreatePickTask={handleCreatePickTask}
                   handleDeletePickTask={handleDeletePickTask}
                   deleteMultiPickTasks={deleteMultiPickTasks}
+                  currentUser={currentUser}
+                  handleCreateJob={handleCreateJob}
                 />
               );
             })}

@@ -67,71 +67,74 @@ const StyleList = ({
 
       let newarray = [];
       for (var order of data) {
-        for (let item of order.itemlist) {
-          let sameSkuFound = false;
-          for (let i = 0; i < newarray.length; i++) {
-            if (item.sku === newarray[i].sku) {
-              sameSkuFound = true;
+        // verify "order.itemlist", or error occurs
+        if (order.itemlist) {
+          for (let item of order.itemlist) {
+            let sameSkuFound = false;
+            for (let i = 0; i < newarray.length; i++) {
+              if (item.sku === newarray[i].sku) {
+                sameSkuFound = true;
 
-              newarray[i] = {
-                ...newarray[i],
-                itemlist: [
-                  ...newarray[i].itemlist,
+                newarray[i] = {
+                  ...newarray[i],
+                  itemlist: [
+                    ...newarray[i].itemlist,
+                    {
+                      sku: item ? item.sku : "",
+                      quantity: item.quantity,
+                      key: item.key,
+                      oid: order.amzId,
+                      buyer: order.buyer,
+                      order_docId: order.id,
+                      status: item.status ? item.status : "",
+                      pickId: item.pickId ? item.pickId : "",
+                      picker: item.picker ? item.picker : ""
+                    }
+                  ],
+                  sku: item.sku,
+                  sameSkuTotalQty:
+                    parseInt(newarray[i].sameSkuTotalQty, 10) +
+                    parseInt(item.quantity, 10),
+                  skuStatus: isSameItemListStatus(
+                    newarray[i].itemlist,
+                    item.status
+                  )
+                    ? item.status === undefined
+                      ? ""
+                      : item.status
+                    : "mixed",
+                  pickers:
+                    item.picker &&
+                    updatePickers(newarray[i].itemlist, item.picker)
+                };
+              } // end if
+            } //end for
+
+            if (!sameSkuFound) {
+              newarray.push({
+                sku: item ? item.sku : "",
+                styleno: item.sku ? item.sku.split("-")[0] : "", // parse the style_number b4 hyphen
+                itemlist: item && [
                   {
+                    // add a brand new item into list
                     sku: item ? item.sku : "",
                     quantity: item.quantity,
                     key: item.key,
                     oid: order.amzId,
                     buyer: order.buyer,
-                    order_docId: order.docId,
+                    order_docId: order.id,
                     status: item.status ? item.status : "",
                     pickId: item.pickId ? item.pickId : "",
                     picker: item.picker ? item.picker : ""
                   }
                 ],
-                sku: item.sku,
-                sameSkuTotalQty:
-                  parseInt(newarray[i].sameSkuTotalQty, 10) +
-                  parseInt(item.quantity, 10),
-                skuStatus: isSameItemListStatus(
-                  newarray[i].itemlist,
-                  item.status
-                )
-                  ? item.status === undefined
-                    ? ""
-                    : item.status
-                  : "mixed",
-                pickers:
-                  item.picker &&
-                  updatePickers(newarray[i].itemlist, item.picker)
-              };
-            } // end if
-          } //end for
-
-          if (!sameSkuFound) {
-            newarray.push({
-              sku: item ? item.sku : "",
-              styleno: item.sku ? item.sku.split("-")[0] : "", // parse the style_number b4 hyphen
-              itemlist: item && [
-                {
-                  // add a brand new item into list
-                  sku: item ? item.sku : "",
-                  quantity: item.quantity,
-                  key: item.key,
-                  oid: order.amzId,
-                  buyer: order.buyer,
-                  order_docId: order.docId,
-                  status: item.status ? item.status : "",
-                  pickId: item.pickId ? item.pickId : "",
-                  picker: item.picker ? item.picker : ""
-                }
-              ],
-              sameSkuTotalQty: parseInt(item.quantity, 10),
-              skuStatus: item.status ? item.status : "",
-              pickers: item.picker ? [item.picker] : []
-            });
-          }
-        }
+                sameSkuTotalQty: parseInt(item.quantity, 10),
+                skuStatus: item.status ? item.status : "",
+                pickers: item.picker ? [item.picker] : []
+              });
+            }
+          } // end for
+        } //end if
       }
 
       let newStyleGroup = [

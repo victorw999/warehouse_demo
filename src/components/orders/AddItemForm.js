@@ -46,7 +46,7 @@ class AddItemForm extends Component {
     let sku = this.state.sku;
     let qty = this.state.qty;
     if (typeof sku === "string" && sku.length > 0 && qty > 0) {
-      this.props.addItem([sku, qty]); // pass in array as arg, to CreateOrder.js's func
+      this.props.addItem(this.state);
       this.resetForm(); //reset the form
     }
   };

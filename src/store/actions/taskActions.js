@@ -60,7 +60,7 @@ export const createPickTask = task => {
 
     // commit task, then start updating orders
     batch.commit().then(() => {
-      updateOrdersCollectionAfterTasksAction(firestore, tempTasks, "create");
+      updateOrdersAfterTasksAction(firestore, tempTasks, "create");
     }); // batch.commit()
   };
 };
@@ -102,18 +102,28 @@ export const deleteMultiPickTasks = list => {
     const profile = getState().firebase.profile;
     const authorId = getState().firebase.auth.uid;
 
+    // filter list that belong to current user
+    var currentUserList = list.filter(i => {
+      if (i.picker === profile.firstName) {
+        return true;
+      } else {
+        console.error("canceling tasks, some tasks are assigned to other usrs");
+        return false;
+      }
+    });
+    // batch init
     var batch = firestore.batch();
-    // delete tasks
-    list.forEach(picktask_item => {
+    // delete tasks (belong to current user)
+    currentUserList.forEach(picktask_item => {
       var newRef = firestore
         .collection("picktasks")
         .doc(`${picktask_item.pickId}`);
-      batch.delete(newRef);
+      batch.delete(newRef); //
     }); // end forEach looping
 
     // commit task, then start updating orders
     batch.commit().then(() => {
-      updateOrdersCollectionAfterTasksAction(firestore, list, "delete");
+      updateOrdersAfterTasksAction(firestore, currentUserList, "delete");
     });
     // batch.commit()
   };
@@ -177,12 +187,12 @@ export const updatePickTask = (pickId, newStatus) => {
  * via firestore "transaction"
  */
 
-const updateOrdersCollectionAfterTasksAction = (firestore, list, type) => {
+const updateOrdersAfterTasksAction = (firestore, list, type) => {
   /**
    * transaction starts
    */
   list.forEach(picktask_item => {
-    if (picktask_item.msg === "note_trigger_not_update_order") {
+    if (picktask_item.msg === "skip_cloud_trigger") {
       var orderRef = firestore
         .collection("orders")
         .doc(`${picktask_item.order_docId}`);
@@ -203,7 +213,9 @@ const updateOrdersCollectionAfterTasksAction = (firestore, list, type) => {
                   ...i,
                   pickId: type === "delete" ? "" : picktask_item.id, // for delete operation,
                   status: type === "delete" ? "" : picktask_item.status,
-                  picker: type === "delete" ? "" : picktask_item.authorFirstName
+                  picker:
+                    type === "delete" ? "" : picktask_item.authorFirstName,
+                  authorId: type === "delete" ? "" : picktask_item.authorId
                 };
               } else {
                 return i;
@@ -223,12 +235,12 @@ const updateOrdersCollectionAfterTasksAction = (firestore, list, type) => {
            */
         }) // end: runTransaction()
         .then(() => {
-          console.log("Transaction: updated 'order' for ", picktask_item.sku);
+          // console.log("Transaction: updated 'order' for ", picktask_item.sku);
         })
         .catch(function(error) {
           console.log("Transaction failed: ", error, picktask_item.sku);
         });
-    } // if "note_trigger_not_update_order"
+    } // if "skip_cloud_trigger"
     else {
       /**
        * picktask was created frm StyleList.js
