@@ -7,7 +7,8 @@ import {
   deletePickTask,
   completePickTask,
   updatePickTask,
-  deleteMultiPickTasks
+  deleteMultiPickTasks,
+  clearAllTasks
 } from "../../store/actions/taskActions";
 import { createJob } from "../../store/actions/jobActions";
 import { createNotification } from "../../store/actions/noteActions";
@@ -17,8 +18,21 @@ import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import { Redirect } from "react-router-dom";
 import { Tabs, Tab } from "react-materialize";
+import { clearOrderStatus } from "../../store/actions/orderActions";
 
 class Dashboard extends Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = { action_feedback: "" };
+  // }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevProps.job !== this.props.job) {
+  //     console.log("----prevProps.job: ", prevProps.job);
+  //     console.log("----this.props.job: ", this.props.job);
+  //     this.setState({ action_feedback: this.props.job });
+  //   }
+  // }
   handleCreatePickTask = task => {
     this.props.createPickTask(task); // call dispatch method from mapDispatchToProps @ line 104
   };
@@ -42,15 +56,39 @@ class Dashboard extends Component {
   };
 
   handleCreateJob = (job, jobType, flag) => {
-    this.props.createJob(job, jobType, flag);
+    let feedback = this.props.createJob(job, jobType, flag);
+    return Promise.resolve(feedback);
+  };
+
+  clearOrderStatus = () => {
+    this.props.clearOrderStatus();
+  };
+  clearAllTasks = () => {
+    this.props.clearAllTasks();
   };
 
   render() {
-    const { orders, auth, notifications, picktasks, profile } = this.props;
+    const {
+      orders,
+      auth,
+      notifications,
+      tasks,
+      profile,
+      jobActionFeedback //idea abandoned, but keep as ref
+    } = this.props;
 
     if (!auth.uid) return <Redirect to="/signin" />;
     return (
       <div className="dashboard container">
+        <div>
+          <button className="btn grey" onClick={this.clearOrderStatus}>
+            RESET ORDER STATUS
+          </button>
+
+          <button className="btn red" onClick={this.clearAllTasks}>
+            CLEAR ALL TASKS
+          </button>
+        </div>
         {/* Selection Tabs */}
         <Tabs className="selection_tabs z-depth-1   ">
           <Tab
@@ -68,12 +106,15 @@ class Dashboard extends Component {
                   StyleList
                  **********/}
                 <StyleList
+                  auth={auth}
+                  profile={profile}
                   orders={orders}
                   handleCreatePickTask={this.handleCreatePickTask}
                   handleDeletePickTask={this.handleDeletePickTask}
                   handleCompletePickTask={this.handleCompletePickTask}
                   handleUpdatePickTask={this.handleUpdatePickTask}
                   handleCreateNotification={this.handleCreateNotification}
+                  handleCreateJob={this.handleCreateJob}
                 />
               </div>
               <div className="col s12 m12 l4 left-align ">
@@ -98,7 +139,7 @@ class Dashboard extends Component {
                  **********/}
                 <OrderList
                   orders={orders}
-                  currentUser={profile.firstName}
+                  profile={profile}
                   handleCreatePickTask={this.handleCreatePickTask}
                   handleDeletePickTask={this.handleDeletePickTask}
                   deleteMultiPickTasks={this.deleteMultiPickTasks}
@@ -125,9 +166,11 @@ class Dashboard extends Component {
               StaffList
               **********/}
                 <StaffList
-                  picktasks={picktasks}
+                  tasks={tasks}
                   handleCompletePickTask={this.handleCompletePickTask}
                   handleDeletePickTask={this.handleDeletePickTask}
+                  handleCreateJob={this.handleCreateJob}
+                  feedback={jobActionFeedback} //idea abandoned, but keep as ref
                 />
               </div>
               <div className="col s12 m12 l4 left-align ">
@@ -165,8 +208,9 @@ const mapStateToProps = state => {
         });
       return odrArr;
     })(),
-    picktasks: state.firestore.ordered.picktasks,
-    profile: state.firebase.profile
+    tasks: state.firestore.ordered.tasks,
+    profile: state.firebase.profile,
+    jobActionFeedback: state.job.tasks_feedbacks //idea abandoned, but keep as ref
   };
 };
 
@@ -179,7 +223,9 @@ const mapDispatchToProps = dispatch => {
     updatePickTask: (task, newStatus) =>
       dispatch(updatePickTask(task, newStatus)),
     createNotification: content => dispatch(createNotification(content)),
-    createJob: (job, jobType, flag) => dispatch(createJob(job, jobType, flag))
+    createJob: (job, jobType, flag) => dispatch(createJob(job, jobType, flag)),
+    clearOrderStatus: () => dispatch(clearOrderStatus()),
+    clearAllTasks: () => dispatch(clearAllTasks())
   };
 };
 
@@ -196,7 +242,7 @@ export default compose(
       orderBy: ["time", "desc"]
     },
     {
-      collection: "picktasks"
+      collection: "tasks"
     }
   ])
 )(Dashboard);

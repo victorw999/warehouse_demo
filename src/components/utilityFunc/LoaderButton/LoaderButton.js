@@ -10,7 +10,8 @@ const LoaderButton = ({
   btnFormat,
   hasIcon,
   icon,
-  iconPos = ""
+  iconPos = "",
+  animationDuration
 }) => {
   const iconPos_class = iconPos => {
     if (iconPos === "") {
@@ -24,7 +25,28 @@ const LoaderButton = ({
       <button
         className={btnFormat}
         onClick={() => {
-          showLoader();
+          /**
+           * Below logic in async is applied to all LoaderButton instances.
+           * we limit animation to run for a fixed duration
+           *  @props - 1. "animationDuration" can be passed in as a time
+           *           2. but when value is "infinite", the animation persist
+           *              e.g.:
+           *              when picking (order_view), we need to wait "picking" status
+           *              fully updated in order collections, so 'create pick/pack' can not
+           *              be clicked for second time.
+           *              this "infinite" value is used in BtnPick.js, BtnPack.js
+           *
+           **/
+          (async () => {
+            let duration = animationDuration ? animationDuration : 3000; // default
+            await showLoader(true);
+            if (animationDuration !== "infinite") {
+              await setTimeout(() => {
+                showLoader(false);
+              }, duration);
+            }
+          })();
+
           handleClick();
         }}
       >

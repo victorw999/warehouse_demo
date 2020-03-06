@@ -1,0 +1,30 @@
+.collapsible.collapsible_doneStyles {
+  // main header
+  .collapsible-header.doneStyles_header {
+    .name {
+      font-size: 1rem !important;
+      text-transform: uppercase !important;
+      font-weight: 600 !important;
+    }
+  } //.doneStyles_header
+
+  // collapsible body
+  .stylelistdone {
+    .collapsible {
+      margin: 0;
+      padding: 0;
+      // override
+      .collapsible-header.done_style_row_header {
+        margin: 0;
+        padding: 0;
+        background-color: color("grey", "lighten-5") !important;
+        color: black !important;
+        .title,
+        .buyer,
+        .disablePickBtn {
+          color: black !important;
+        }
+      }
+    }
+  } // .stylelistdone
+} // collapsible_doneStyles

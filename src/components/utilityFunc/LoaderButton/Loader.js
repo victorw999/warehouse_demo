@@ -11,8 +11,24 @@ const Loader = WrappedComponent => {
       this.showLoader = this.showLoader.bind(this);
     }
 
-    showLoader() {
-      this.setState({ isLoading: true });
+    showLoader(input) {
+      this.setState({ isLoading: input }); // original default was true
+    }
+
+    /**
+     *    * this feature is obsolete
+     *    when receiving prop "stop_loader"
+     *    Loader.js will stop loader animation
+     */
+    componentDidUpdate(prevProps) {
+      if (prevProps.stop_loader !== this.props.stop_loader) {
+        // if detecting the 'stop_loader' prop has been filled, then turn off loader animation
+        if (this.props.stop_loader === "stop_loader") {
+          setTimeout(() => {
+            this.setState({ isLoading: false });
+          }, 3000);
+        }
+      }
     }
 
     render() {

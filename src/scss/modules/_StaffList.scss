@@ -9,6 +9,11 @@
     font-weight: 600;
   }
 
+  &.done_tasks_section {
+    .collapsible-header {
+      background-color: color("grey", "base") !important;
+    }
+  } // .done_task_section
   .actions_section {
     display: flex;
     flex-flow: row wrap;
@@ -26,13 +31,13 @@
       &.teal_before {
         color: color("teal", "lighten-1");
         border: color("teal", "lighten-1") 1px solid;
-
         & .material-icons {
           // float: unset !important;
           // margin: 0;
         }
       }
       &.teal_after {
+        cursor: default;
         color: transparent;
         background-color: color("teal", "lighten-1");
         border: color("teal", "lighten-1") 1px solid;

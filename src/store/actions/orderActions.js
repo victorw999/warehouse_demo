@@ -203,3 +203,55 @@ export const updateOrderItemStatus = item => {
       });
   }; // end return
 };
+
+/**
+ *
+ * CLEAR ALL ORDER STATUS
+ */
+export const clearOrderStatus = () => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    // make async calls to db: add this order to firebase, b4 dispatch the action
+    const firestore = getFirestore();
+    firestore
+      .collection("orders")
+      .get() // retrieve the results which meet the 'where' condition
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          console.log("orderaction.js: ", doc.id);
+
+          var list = doc.data().itemlist;
+
+          list = list.map(i => {
+            return {
+              ...i,
+              pickId: "",
+              picker: "",
+              picker_init: "",
+              packId: "",
+              packer: "",
+              packer_init: "",
+              status: ""
+            };
+          });
+          console.log("list -- ", list);
+          try {
+            firestore
+              .collection("orders")
+              .doc(doc.id)
+              .update({
+                itemlist: [...list]
+              });
+          } catch (e) {
+            console.error("err accessing firestore collection ..." + e);
+          }
+        });
+      })
+      .then(() => {
+        // dispatch({ type: "UPDATE_ORDER", order });
+        // console.log("...finished update firestore");
+      })
+      .catch(err => {
+        dispatch({ type: "UPDATE_ORDER_ERROR", err });
+      });
+  };
+};

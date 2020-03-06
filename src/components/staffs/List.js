@@ -1,29 +1,21 @@
-import React, { useState } from "react";
-import LoaderButton from "../utilityFunc/LoaderButton/LoaderButton";
-import ConfirmDeletion from "../orders/Modals/ConfirmDeletion";
+/**
+ * @desc - renders collaspible Header & Body depends on 'usersFiltered' prop
+ *
+ *  "usersFiltered" - an obj constains key-value pairs, in which the key is user id, value is the tasks of the user
+ *
+ *  loop thru "usersFiltered",
+ *    user_header() renders collapsible header
+ *    user_tasks()  renders collapsible body
+ */
 
-export default function List({
-  users,
-  handleCompletePickTask,
-  handleDeletePickTask
-}) {
-  const [modalOpen, setModalOpen] = useState(false); // hooks for Modal ConfirmDeletion
-  const [toDeleteId, setToDeleteId] = useState(""); // hold the 'to be deleted' task id for Modal
-  const modalYes = () => {
-    try {
-      if (toDeleteId && toDeleteId !== "") {
-        handleDeletePickTask(toDeleteId);
-        setModalOpen(false); // close modal
-      }
-    } catch (e) {
-      console.log("modal err: ", e);
-    }
-  };
+import React from "react";
+import ListBtns from "./ListBtns";
 
-  const modalNo = () => {
-    setModalOpen(false);
-  };
-
+const List = ({
+  usersFiltered,
+  handleCreateJob,
+  tasks // for ListBtns.js logic: prohibit cxl pick once order is 'packing'
+}) => {
   const isEmpty = obj => {
     var hasOwnProperty = Object.prototype.hasOwnProperty;
     if (obj === undefined) return true;
@@ -39,6 +31,12 @@ export default function List({
     }
     return true;
   };
+  /**
+   *
+   * @desc - depend on task's status change the look
+   * @param {string} status - task's status
+   * @returns - className
+   */
   const statusColor = status => {
     if (status === "picking") {
       return "blue";
@@ -52,16 +50,16 @@ export default function List({
   };
   return (
     <ul className="collapsible collapsible_stafflist">
-      {!isEmpty(users)
-        ? Object.keys(users).map(key => {
+      {!isEmpty(usersFiltered)
+        ? Object.keys(usersFiltered).map(key => {
             /**
              *  this user's tasks
              */
-            const user_tasks = users[key].map(t => {
+            const user_tasks = usersFiltered[key].map(t => {
               return (
                 <tr className="staff_task" key={t.key}>
                   <td>
-                    {t.authorFirstName} <br />
+                    {t.owner} <br />
                     <span
                       className={"badge white-text " + statusColor(t.status)}
                     >
@@ -76,78 +74,22 @@ export default function List({
                   <td>{t.sku}</td>
                   <td>[{t.quantity}]</td>
                   <td className="actions_section">
-                    {/* 
-                      Cancel Task Button
-                    */}
-                    {modalOpen ? (
-                      // include this btn to resolve spin btn issue
-                      <button className="btn-flat act_btn white">
-                        <i className="material-icons">cancel</i>
-                      </button>
-                    ) : (
-                      <LoaderButton
-                        btnFormat="btn-flat red act_btn"
-                        hasIcon={true}
-                        icon="cancel"
-                        iconPos="middle"
-                        handleClick={() => {
-                          setModalOpen(true); // open modal for user confirmation
-                          setToDeleteId(t.id); // pass 'to be deleted' task id to state var
-                        }}
-                      />
-                    )}
-                    {/* 
-                      Complete Task Button
-                    */}
-                    {t.status === "pick_complete" ? (
-                      <button className="btn-flat act_btn teal_after">
-                        <i className="material-icons">check_circle</i>
-                      </button>
-                    ) : (
-                      <LoaderButton
-                        btnFormat={"btn-flat act_btn teal_before "}
-                        hasIcon={true}
-                        icon="check"
-                        iconPos="middle"
-                        handleClick={() => {
-                          console.log("t.id = ", t.id);
-                          handleCompletePickTask(t.id);
-                        }}
-                      />
-                    )}
+                    <ListBtns
+                      task={t}
+                      handleCreateJob={handleCreateJob}
+                      tasks={tasks} // for ListBtns.js logic: prohibit cxl pick once order is 'packing'
+                    />
                   </td>
-                  {/* 
-                      Cancel Modal
-                   */}
-                  <ConfirmDeletion
-                    onClickYes={null}
-                    onClickNo={null}
-                    name={t.buyer + " " + t.status + " task"}
-                    open={modalOpen}
-                    actions={[
-                      <button
-                        onClick={modalNo}
-                        className="modal-close waves-effect waves-green btn-flat"
-                      >
-                        No
-                      </button>,
-                      <button
-                        onClick={modalYes}
-                        className="modal-close waves-effect waves-light btn-flat red white-text"
-                      >
-                        Yes
-                      </button>
-                    ]}
-                  />
                 </tr>
               );
             });
 
             /**
-             *  user header: get 1st item from user's array, assuming users[key] size is >0
+             *  USER HEADER
              */
-            const user_collaps = (() => {
-              const userName = users[key][0].authorFirstName;
+            const user_header = (() => {
+              // get 1st item from user's array, assuming usersFiltered[key] size is >0
+              const userName = usersFiltered[key][0].owner;
               return (
                 <li className="collapsible-item" key={key}>
                   <div className="collapsible-header staff_header teal lighten-2 white-text">
@@ -163,9 +105,10 @@ export default function List({
               );
             })();
 
-            return <>{user_collaps}</>;
+            return <>{user_header}</>;
           })
-        : "NO DATA (List.js)"}
+        : "No Tasks"}
     </ul>
   );
-}
+};
+export default List;

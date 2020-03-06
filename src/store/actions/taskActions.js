@@ -41,17 +41,23 @@ export const createPickTask = task => {
 
     var batch = firestore.batch();
     var tempTasks = [];
-
+    console.log("createPickTask ", task.itemlist);
     // creat task(s)
     task.itemlist.forEach(picktask_item => {
-      var newRef = firestore.collection("picktasks").doc();
+      var newRef = firestore.collection("tasks").doc();
       var newPicktask = {
-        ...picktask_item,
+        // only add what's needed into task
+        sku: picktask_item.sku,
+        quantity: picktask_item.quantity,
+        key: picktask_item.key,
+        buyer: picktask_item.buyer,
+        order_docId: picktask_item.order_docId,
+        // task's
+        type: "pick",
+        owner: profile.firstName,
+        initials: profile.initials,
+        ownerId: authorId,
         status: "picking",
-        authorFirstName: profile.firstName,
-        authorLastName: profile.lastName,
-        authorId: authorId,
-        startTime: new Date(),
         id: newRef.id // put the new task's ref id inside
       };
       batch.set(newRef, newPicktask);
@@ -246,10 +252,40 @@ const updateOrdersAfterTasksAction = (firestore, list, type) => {
        * picktask was created frm StyleList.js
        * regular creating picktask, skip above transaction, wait for triggers to update order
        */
+      return null;
     }
   }); // end forEach looping itemlist
 
   /**
    * transaction end
    */
+};
+
+/**
+ *
+ *  CANCEL, DELETE ALL TASKS
+ */
+export const clearAllTasks = () => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    // make async calls to db: add this order to firebase, b4 dispatch the action
+    const firestore = getFirestore();
+
+    firestore
+      .collection("tasks")
+      .get()
+      .then(snap => {
+        var batch = firestore.batch();
+        snap.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+        return batch.commit();
+      })
+      .then(() => {
+        console.log("all task deleted! ");
+      })
+      .catch(err => {
+        // dispatch({ type: "DELETE_PICKTASK_ERROR", err });
+        console.log(err);
+      });
+  };
 };

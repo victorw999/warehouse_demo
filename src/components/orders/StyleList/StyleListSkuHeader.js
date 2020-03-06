@@ -1,11 +1,12 @@
 import React from "react";
 import LoaderButton from "../../utilityFunc/LoaderButton/LoaderButton";
 
-const StyleListSkuHeader = ({ item, handleCreatePickTask }) => {
+const StyleListSkuHeader = ({ item, handleCreateJob, extraStyle }) => {
   // insert CSS based on item's status
   function formatStyleHeader(status) {
     if (isEmpty(status)) {
-      return " grey darken";
+      // return " grey darken";
+      return " teal lighten-1 ";
     } else if (status === "picking") {
       return " blue ";
     } else if (status === "pick_complete") {
@@ -46,13 +47,15 @@ const StyleListSkuHeader = ({ item, handleCreatePickTask }) => {
     <div
       className={
         "collapsible-header style_header row valign-wrapper" +
-        formatStyleHeader(item.skuStatus)
+        formatStyleHeader(item.skuStatus) +
+        " " +
+        (extraStyle ? extraStyle : "")
       }
     >
       {/* QUAUTITY */}
       <span className="col s12 m3">
         <span className="sku_qty btn-floating waves-effect waves-light white teal-text">
-          {item && item.sameSkuTotalQty}
+          {item && item.skuQty}
         </span>
       </span>
       {/* SKU + BUYER NAME */}
@@ -79,10 +82,34 @@ const StyleListSkuHeader = ({ item, handleCreatePickTask }) => {
             btnName={"PICK"}
             btnFormat={"btn-flat white teal-text pickbtn"}
             handleClick={() => {
-              handleCreatePickTask({
-                // itemlist be sent to 'picktasks' collection in firestore
-                itemlist: item && item.itemlist
-              });
+              if (item.itemlist) {
+                let picktask_itemlist = [...item.itemlist];
+
+                picktask_itemlist = picktask_itemlist.map(i => {
+                  return {
+                    sku: i.sku,
+                    quantity: i.quantity,
+                    key: i.key,
+                    buyer: i.buyer,
+                    order_docId: i.order_docId
+                  };
+                });
+
+                console.log(("picktask_itemlist ": picktask_itemlist));
+                handleCreateJob(
+                  picktask_itemlist,
+                  "createPickTask",
+                  "style_view"
+                );
+              } else {
+                console.log("StyleListSkuHeader.js: itemlist not ready!!!");
+              }
+
+              // handleCreatePickTask({
+              //   itemlist: item && item.itemlist
+              // });
+
+              // handleCreateJob()
             }}
           />
         )}

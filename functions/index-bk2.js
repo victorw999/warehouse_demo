@@ -415,7 +415,7 @@ const job_updateOrder_afterTask = (tasksObj, flag) => {
    *
    *
    */
-  if (flag === "items_from_same_order") {
+  if (flag === "order_view") {
     // update same order
   } else {
     // update diff order in a batch

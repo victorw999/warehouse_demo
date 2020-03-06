@@ -131,7 +131,7 @@ const updateItemStatusOnCreate3 = picktask => {
     })
     .then(results => {
       const notification = {
-        content: `${picktask.authorFirstName} wants to pick (${picktask.sameSkuTotalQty}x, ${picktask.sku} )`,
+        content: `${picktask.authorFirstName} wants to pick (${picktask.skuQty}x, ${picktask.sku} )`,
         user: `${picktask.authorFirstName}`,
         time: admin.firestore.FieldValue.serverTimestamp()
       };

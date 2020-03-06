@@ -20,7 +20,7 @@ const SignedInLinks = props => {
           <Dropdown
             className="nav_dropdown  "
             trigger={
-              <Button floating className="nav_dropdown_btn" waves="light">
+              <Button floating className="nav_dropdown_btn">
                 <i className="material-icons"> add </i>
               </Button>
             }
@@ -40,7 +40,7 @@ const SignedInLinks = props => {
           <NavLink to="/createorder">New Order</NavLink>
         </li> */}
         <li>
-          <Button floating className="nav_dropdown_btn" waves="light">
+          <Button floating className="nav_dropdown_btn">
             <i className="material-icons"> insert_chart </i>
           </Button>
         </li>

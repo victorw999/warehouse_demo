@@ -20,8 +20,8 @@ import { connect } from "react-redux";
 
 import { Redirect } from "react-router-dom";
 import { isValidDate } from "../VicUtilityFunctions";
-import useDataApi from "../useDataApi";
 
+import useDataApi from "../../utilityFunc/fetchData/useDataApi";
 const OrderDetail = props => {
   // updateOrder() is passed in as props frm mapDispatchToProps
   const { order, auth, updateOrder } = props;
@@ -157,7 +157,7 @@ const OrderDetail = props => {
             </div>
           </div>
           <div className="row">
-            <div className="input-field col s6">
+            <div className="input-field col s6 ">
               <input
                 type="text"
                 id="shipAddr"

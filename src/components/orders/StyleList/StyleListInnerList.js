@@ -10,8 +10,7 @@
  *  */
 
 import React, { useState, useEffect } from "react";
-
-import { Modal } from "react-materialize";
+import MsgModal from "../../modals/MsgModal";
 
 const StyleListInnerList = ({
   innerlist,
@@ -19,7 +18,9 @@ const StyleListInnerList = ({
   orders,
   handleUpdatePickTask,
   handleCreatePickTask,
-  handleCreateNotification
+  handleCreateNotification,
+  profile,
+  handleCreateJob
 }) => {
   var value = 0;
   const regexp = new RegExp(`^[0-9]*$`); // valid if it's a number >= 0
@@ -46,9 +47,11 @@ const StyleListInnerList = ({
   const promptSubmitted = () => {
     setModalOpen(true);
   };
+
   const modalNo = () => {
     setModalOpen(false);
   };
+
   const handleChange = event => {
     const newValue = event.target.value;
     if (regexp.test(newValue)) {
@@ -101,15 +104,34 @@ const StyleListInnerList = ({
     }
     return true;
   };
-  const handleNoInventory = payload => {
-    for (let i of payload.itemStatus) {
+  const submitChanges = payload => {
+    console.log("innerlist: payload: ", payload);
+
+    // mixedPickTask
+    let mixed = payload.itemStatus.map(i => {
       if (i.pickId === "") {
-        // which means StyleList side picked it, and then StaffList side cancel the picktask, thus here create a new task
-        handleCreatePickTask({ itemlist: [i] });
+        // scenario: StyleList side picked it, and then StaffList side cancel the picktask, thus here create a new task
+        return {
+          ...i,
+          item_jobType: "createPickTask"
+        };
       } else {
-        handleUpdatePickTask(i.pickId, i.status);
+        return {
+          ...i,
+          item_jobType: "updatePickTask"
+        };
       }
-    }
+    });
+
+    handleCreateJob(
+      {
+        list: [...mixed],
+        missing: payload.missing,
+        innerlistUpdate: true
+      },
+      "mixedPickTask",
+      "style_view"
+    );
   };
 
   return (
@@ -246,7 +268,7 @@ const StyleListInnerList = ({
                 }
 
                 // submit
-                handleNoInventory(payload, orders);
+                submitChanges(payload);
 
                 // prompt user that inventory issue submitted
                 promptSubmitted();
@@ -258,23 +280,20 @@ const StyleListInnerList = ({
         </div>
       </div>
 
-      <Modal
+      <MsgModal
         id="issue_submitted"
         open={modalOpen}
+        header="Issue Submitted"
+        content="Issue Submitted"
         actions={[
           <button
             onClick={modalNo}
-            className="modal-close waves-effect teal lighten-1 btn-flat"
+            className="modal-close teal lighten-1 btn-flat"
           >
             Close
           </button>
         ]}
-        header="Issue Submitted"
-      >
-        <div className="modal-content ">
-          <p>Issue Submitted</p>
-        </div>
-      </Modal>
+      />
     </>
   );
 };

@@ -1,4 +1,5 @@
-.OrderSummary_row {
+.OrderSummary_row,
+.OrderSummaryDone_row {
   .itemsdetail {
     text-transform: capitalize;
   } //itemsdetail
@@ -11,13 +12,16 @@
       padding: 0px 1rem;
       font-weight: 900;
     }
+    // depends on item's status, display icons
     .status i {
       font-size: 19px !important;
-      &.picking {
-        color: color("blue", "base");
+      &.picking,
+      &.packing {
+        color: color("blue", "base") !important;
       }
-      &.pick_complete {
-        color: color("green", "base");
+      &.pick_complete,
+      &.pack_complete {
+        color: color("green", "base") !important;
       }
     } // .status i
     .picker_init {
@@ -56,3 +60,13 @@
     }
   } //actions_section
 } // end OrderSummary_row
+
+.collapsible_doneOrders {
+  .doneOrders_header {
+    .name {
+      font-size: 1rem;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+  } //.doneOrders_header
+} // .collapsible_doneOrders

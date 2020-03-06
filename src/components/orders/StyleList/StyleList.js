@@ -1,23 +1,25 @@
 // this file is started using OrderList.js as template
 
 import React, { useState, useEffect } from "react";
-
-import useDataApi from "../useDataApi";
-// import { Collapsible, CollapsibleItem } from "react-materialize";
-// Import Materialize
+import useDataApi from "../../utilityFunc/fetchData/useDataApi";
 import M from "materialize-css";
 
-import LoaderButton from "../../utilityFunc/LoaderButton/LoaderButton";
 import StyleListInnerList from "./StyleListInnerList";
 import StyleListSkuHeader from "./StyleListSkuHeader";
+import StyleListBtns from "./StyleListBtns";
+import StyleListDoneCollap from "./StyleListDoneCollap";
 
+import assortOrders from "./assortOrders"; // functino that classifies 'orders' into style groups
 const StyleList = ({
+  auth,
+  profile,
   orders,
   handleCreatePickTask,
   handleDeletePickTask,
   handleCompletePickTask,
   handleUpdatePickTask,
-  handleCreateNotification
+  handleCreateNotification,
+  handleCreateJob
 }) => {
   // useReducer: custom hook
   const [{ data }, updateData] = useDataApi(orders);
@@ -25,157 +27,63 @@ const StyleList = ({
   // use ref to capture the lastest REF: https://overreacted.io/a-complete-guide-to-useeffect/
 
   // group 'styles' into group
-  const [styleGroup, setStyleGroup] = useState([]);
+  const [newStyleGroup, setNewStyleGroup] = useState([]); // incompleted tasks
+  const [doneStyleGroup, setDoneStyleGroup] = useState([]); // completed tasks
 
   // materializecss Collapsible Init
   // M.AutoInit(); // the "Collapsible" work w/ just this line, but no 'accordin' option
-  let elems = document.querySelectorAll(".collapsible_stylelist");
-  let options = {
+
+  // Collapsible Init: "in-complete style gorup"
+  let elems1 = document.querySelectorAll(".collapsible_stylelist");
+  var instances1 = M.Collapsible.init(elems1, {
     accordion: true
-  };
-  var instances = M.Collapsible.init(elems, options);
+  });
 
-  const isSameItemListStatus = (itemlist, status) => {
-    let newItemStatus = status;
-    if (!status) {
-      newItemStatus = ""; // handle if status is undefined
-    }
-    for (let i of itemlist) {
-      if (i.status !== newItemStatus) {
-        return false;
-      }
-    }
-    return true;
-  };
+  // Collapsible Init:  for "completed style group"
+  let elems2 = document.querySelectorAll(".collapsible_doneStyles");
+  var instances2 = M.Collapsible.init(elems2, {
+    accordion: false
+  });
 
-  // need to verify each picker in the itemlist[]
-  const updatePickers = (itemlist, picker) => {
-    var pickers = [picker];
-
-    itemlist.forEach(i => {
-      if (!pickers.some(p => p === i.picker)) {
-        pickers.push(i.picker);
-      }
-    });
-    return [...pickers];
-  };
-
-  // initialize array
+  /**
+   *  INITIALIZE ARRAY
+   *  using the strategy in useDataApi2.js
+   *  which is that: utilizing 'didCancel' to be aware of mount/unmount,
+   *  use async() to wait the assortOrders() is done
+   */
   useEffect(() => {
+    let didCancel = false;
     if (data && Array.isArray(data)) {
-      // need to check if it's an array because if useDataApi have not fetch the "orders", it'll return the default obj
-
-      let newarray = [];
-      for (var order of data) {
-        // verify "order.itemlist", or error occurs
-        if (order.itemlist) {
-          for (let item of order.itemlist) {
-            let sameSkuFound = false;
-            for (let i = 0; i < newarray.length; i++) {
-              if (item.sku === newarray[i].sku) {
-                sameSkuFound = true;
-
-                newarray[i] = {
-                  ...newarray[i],
-                  itemlist: [
-                    ...newarray[i].itemlist,
-                    {
-                      sku: item ? item.sku : "",
-                      quantity: item.quantity,
-                      key: item.key,
-                      oid: order.amzId,
-                      buyer: order.buyer,
-                      order_docId: order.id,
-                      status: item.status ? item.status : "",
-                      pickId: item.pickId ? item.pickId : "",
-                      picker: item.picker ? item.picker : ""
-                    }
-                  ],
-                  sku: item.sku,
-                  sameSkuTotalQty:
-                    parseInt(newarray[i].sameSkuTotalQty, 10) +
-                    parseInt(item.quantity, 10),
-                  skuStatus: isSameItemListStatus(
-                    newarray[i].itemlist,
-                    item.status
-                  )
-                    ? item.status === undefined
-                      ? ""
-                      : item.status
-                    : "mixed",
-                  pickers:
-                    item.picker &&
-                    updatePickers(newarray[i].itemlist, item.picker)
-                };
-              } // end if
-            } //end for
-
-            if (!sameSkuFound) {
-              newarray.push({
-                sku: item ? item.sku : "",
-                styleno: item.sku ? item.sku.split("-")[0] : "", // parse the style_number b4 hyphen
-                itemlist: item && [
-                  {
-                    // add a brand new item into list
-                    sku: item ? item.sku : "",
-                    quantity: item.quantity,
-                    key: item.key,
-                    oid: order.amzId,
-                    buyer: order.buyer,
-                    order_docId: order.id,
-                    status: item.status ? item.status : "",
-                    pickId: item.pickId ? item.pickId : "",
-                    picker: item.picker ? item.picker : ""
-                  }
-                ],
-                sameSkuTotalQty: parseInt(item.quantity, 10),
-                skuStatus: item.status ? item.status : "",
-                pickers: item.picker ? [item.picker] : []
-              });
-            }
-          } // end for
-        } //end if
-      }
-
-      let newStyleGroup = [
-        {
-          styleno: newarray[0] ? newarray[0].styleno : "",
-          totalQty:
-            newarray[0] && parseInt(newarray[0].itemlist[0].quantity, 10),
-          members: [newarray[0]]
-        }
-      ];
-
-      let groupFound = false;
-
-      for (let i = 1; i < newarray.length; i++) {
-        for (let group of newStyleGroup) {
-          if (group.styleno === newarray[i].styleno) {
-            group.totalQty += newarray[i].sameSkuTotalQty;
-            group.members.push({
-              ...newarray[i]
-            });
-            groupFound = true;
-            break;
+      const fetchData = async () => {
+        await new Promise((resolve, reject) => {
+          let result = assortOrders(orders);
+          if (result) {
+            resolve(result);
+          } else {
+            reject(" StyleList msg:  not ready ");
           }
-        }
-        if (!groupFound) {
-          newStyleGroup.push({
-            styleno: newarray[i].styleno,
-            totalQty: newarray[i].sameSkuTotalQty,
-            members: [newarray[i]]
-          });
-        }
-        groupFound = false;
-      }
-      newStyleGroup.sort((a, b) => (a.styleno > b.styleno ? 1 : -1));
-      setStyleGroup(newStyleGroup);
-    }
+        }).then(result => {
+          if (!didCancel) {
+            setNewStyleGroup(result.new);
+            setDoneStyleGroup(result.done);
+          }
+        });
+      };
+      fetchData();
+    } // END
+    /**
+     * cleanup func: runs when component unmounts
+     */
+    return () => {
+      didCancel = true;
+    };
   }, [data]);
 
-  // if detecting changes from upstream, update useDataApi
+  /**
+   * if detecting changes from upstream, update useDataApi
+   */
   useEffect(() => {
-    updateData(orders); //  update useDataApi w/ the most recent 'orders'
+    updateData(orders);
   }, [orders]);
 
   function isEmpty(str) {
@@ -198,8 +106,8 @@ const StyleList = ({
       orders.length < 1
     ) {
       return false;
-    } else if (typeof styleGroup[0] !== "undefined") {
-      if (isEmpty(styleGroup[0].styleno)) {
+    } else if (typeof newStyleGroup[0] !== "undefined") {
+      if (isEmpty(newStyleGroup[0].styleno)) {
         return false;
       } else {
         return true;
@@ -210,30 +118,24 @@ const StyleList = ({
   return (
     <div className="stylelist section">
       <h5 className="card-title">Styles</h5>
-
-      {/* how-to-import-javascript-jquery-in-reactjs 
-          https://stackoverflow.com/questions/53113921/materializecss-with-reactjs-how-to-import-javascript-jquery-in-reactjs
-        */}
-
       <ul className="collapsible collapsible_stylelist">
         {!checkOrders(orders)
           ? "NO ORDERS "
-          : styleGroup.map(group => {
+          : newStyleGroup.map(group => {
               var item_rows = group.members.map(item => {
                 return (
-                  <li
-                    key={item.sku + item.sameSkuTotalQty}
-                    className="collapsible-item"
-                  >
-                    {/* 
-                      collapsible header
+                  <li key={item.sku + item.skuQty} className="collapsible-item">
+                    {/*                      
+                        COLLAPSIBLE HEADER
                      */}
                     <StyleListSkuHeader
                       item={item}
                       handleCreatePickTask={handleCreatePickTask}
+                      handleCreateJob={handleCreateJob}
                     />
-
-                    {/* collapsible body */}
+                    {/*                      
+                        COLLAPSIBLE BODY
+                     */}
                     {!isUndefined(item.skuStatus) &&
                     (item.skuStatus === "picking" ||
                       item.skuStatus === "n/a" ||
@@ -249,65 +151,25 @@ const StyleList = ({
                             handleUpdatePickTask={handleUpdatePickTask}
                             handleCreatePickTask={handleCreatePickTask}
                             handleCreateNotification={handleCreateNotification}
+                            profile={profile}
+                            handleCreateJob={handleCreateJob}
                           />
                         ) : (
                           ""
                         )}
 
-                        {/* btn section  */}
-                        <div className="row utilButton_row">
-                          {/* 
-                              n/a BUTTON
-                          */}
-                          <span className="col s12 m4">
-                            {item.skuStatus === "mixed" ? (
-                              ""
-                            ) : (
-                              <LoaderButton
-                                btnName="N/A"
-                                btnFormat="btn-flat orange utilButton"
-                                hasIcon={true}
-                                icon="warning"
-                                handleClick={() => {
-                                  item.itemlist.map(i => {
-                                    handleUpdatePickTask(i.pickId, "n/a");
-                                  });
-                                }}
-                                status={item.skuStatus}
-                              />
-                            )}
-                          </span>
-                          {/* 
-                              cancel BUTTON
-                          */}
-                          <span className="col s12 m4">
-                            <LoaderButton
-                              btnName="CANCEL"
-                              btnFormat="btn-flat red utilButton"
-                              hasIcon={true}
-                              icon="cancel"
-                              handleClick={() => {
-                                item.itemlist.forEach(i => {
-                                  handleDeletePickTask(i.pickId);
-                                });
-                              }}
-                            />
-                          </span>
-                          {/* 
-                              done BUTTON
-                          */}
-                          <span className="col s12 m4">
-                            <LoaderButton
-                              btnName="DONE"
-                              btnFormat="btn-flat teal lighten-1 utilButton"
-                              hasIcon={true}
-                              icon="check_circle"
-                              handleClick={() => {
-                                handleCompletePickTask(item.pickId);
-                              }}
-                            />
-                          </span>
-                        </div>
+                        {/* 
+                            BUTTONS SECTION 
+                        */}
+                        <StyleListBtns
+                          auth={auth}
+                          profile={profile}
+                          handleCreateJob={handleCreateJob}
+                          item={item}
+                          handleUpdatePickTask={handleUpdatePickTask}
+                          handleDeletePickTask={handleDeletePickTask}
+                          handleCompletePickTask={handleCompletePickTask}
+                        />
                       </div>
                     ) : (
                       ""
@@ -335,6 +197,11 @@ const StyleList = ({
               );
             })}
       </ul>
+      {/* DONE STYLE GROUP (COMPLETED) */}
+      <h5 className="card-title">Completed</h5>
+      <div>
+        <StyleListDoneCollap styleGroup={doneStyleGroup} />
+      </div>
     </div>
   );
 };
