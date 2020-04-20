@@ -1,16 +1,21 @@
+/**
+ * @desc - display notification collection frm firestore
+ *
+ */
+
 import React from "react";
 import moment from "moment";
 
-const Notifications = props => {
+const Notifications = (props) => {
   const { notifications } = props;
   return (
-    <div className="section">
+    <div className="section" id="notifications">
       <div className="card z-depth-0">
         <div className="card-content">
           <span className="card-title">Notifications</span>
           <ul className="online-users notifications">
             {notifications &&
-              notifications.map(item => {
+              notifications.map((item) => {
                 return (
                   <li key={item.id}>
                     <span className="pink-text">{item.user} </span>

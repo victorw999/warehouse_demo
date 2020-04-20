@@ -21,7 +21,7 @@ const LoaderButton = ({
     }
   };
   return (
-    <div>
+    <>
       <button
         className={btnFormat}
         onClick={() => {
@@ -38,16 +38,18 @@ const LoaderButton = ({
            *
            **/
           (async () => {
-            let duration = animationDuration ? animationDuration : 3000; // default
+            let duration = animationDuration ? animationDuration : 5000; // default
             await showLoader(true);
+            // console.log(`========showLoader(true) duration:${duration}`);
             if (animationDuration !== "infinite") {
+              // console.log("========animationDuration NOT INFINITE");
               await setTimeout(() => {
                 showLoader(false);
+                // console.log("========showLoader(false) ");
               }, duration);
             }
+            await handleClick();
           })();
-
-          handleClick();
         }}
       >
         {btnName}
@@ -57,7 +59,7 @@ const LoaderButton = ({
           ""
         )}
       </button>
-    </div>
+    </>
   );
 };
 

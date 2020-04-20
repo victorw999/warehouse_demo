@@ -2,14 +2,17 @@
 // tutorial: https://www.robinwieruch.de/react-hooks-fetch-data#how-to-trigger-a-hook-programmaticallymanually
 
 /**
- * this is a custom hook for fetch/load data from the 'order' prop into state variable
+ *
+ * this is a new attempt to refactor this custom hook,
+ * so  not only it can fetch 'orders', it can also fetch other collections such as 'tasks'
+ *
  */
 import { useEffect, useReducer } from "react";
 
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
-    case "ORDER_FULLY_LOADED":
-      // console.log("ORDER_FULLY_LOADED");
+    case "FULLY_LOADED":
+      // console.log("FULLY_LOADED");
       return { ...state, initFlag: true };
     case "UPDATE_DATA":
       // console.log("UPDATE_DATA");
@@ -23,7 +26,7 @@ const dataFetchReducer = (state, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        data: action.payload
+        data: action.payload,
       };
     case "FETCH_FAILURE":
       // console.log("FETCH_FAILURE");
@@ -32,37 +35,31 @@ const dataFetchReducer = (state, action) => {
       throw new Error();
   }
 };
-
-// the 'order' param is from:  firestore -> mapStateToProps -> order
-const useDataApi = order => {
+/**
+ * @desc -    main definition of custom hook
+ * @param -   firestore -> mapStateToProps -> "e.g.: order/task"
+ *            try to fetch "one" ducument from collection
+ */
+const useDataApi = (source) => {
   const [state, dispatch] = useReducer(dataFetchReducer, {
     isLoading: false,
     isError: false,
-    data: order
-      ? order
-      : {
-          amzId: "",
-          buyer: "",
-          shipAddr: "",
-          shipCity: "",
-          shipState: "",
-          shipZip: "",
-          shipOption: ""
-        },
-    initFlag: false // signals if data finished loaded into state var 'data'
+    initFlag: false, // signals if data finished loaded into state var 'data'
+    data: source ? source : {},
   });
 
-  // function for OrderDetail.js to update this API's inner data
-  const updateData = updates => {
+  // function for other funcs(e.g:OrderDetail.js ) to update this API's inner data
+  const updateData = (updates) => {
     dispatch({ type: "UPDATE_DATA", payload: updates });
   };
-  /********************************
-   * init state section
-   ********************************/
+
+  /**
+   * init state
+   */
   useEffect(() => {
     let didCancel = false;
-    if (order != null) {
-      dispatch({ type: "ORDER_FULLY_LOADED" });
+    if (source != null) {
+      dispatch({ type: "FULLY_LOADED" }); // will set "initFlag" to true
     }
     if (!state.initFlag) {
       // only fetch data when 'initFlag' has not been set
@@ -71,35 +68,40 @@ const useDataApi = order => {
 
         try {
           await new Promise((resolve, reject) => {
-            if (order) {
-              resolve(order);
+            if (source) {
+              resolve(source);
             } else {
-              reject("useDataApi.js msg: prop 'order' not ready ");
+              reject("useDataApi2.js msg:  not ready ");
             }
           })
-            .then(result => {
+            .then((result) => {
               if (!didCancel) {
                 dispatch({ type: "FETCH_SUCCESS", payload: result });
               }
             })
-            .catch(e => {
-              console.error(e);
+            .catch((e) => {
+              console.log(e);
             });
         } catch (error) {
           if (!didCancel) {
             dispatch({ type: "FETCH_FAILURE" });
           }
-          console.error("useDataApi.js msg: fetch data error: ", error);
+          console.log("useDataApi2.js msg: fetch data error: ", error);
         }
       };
       fetchData();
 
-      // cleanup function
+      /**
+       * cleanup func: runs when component unmounts
+       * If the component unmount, the flag prevents setting the component state
+       * after the data fetching has been asynchronously resolved eventually.
+       * In other words: we only allow setting the component state, when it mounts
+       */
       return () => {
         didCancel = true;
       };
     }
-  }, [order]); // put 'order' in 2nd args to to check if "firestore->props->order" is complete
+  }, [source]); // put 'order' in 2nd args to to check if "firestore->props->order" is complete
 
   return [state, updateData];
 };

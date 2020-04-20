@@ -9,7 +9,7 @@ module.exports = job => {
   var batch_delete = db.batch();
   var tasksObj = {}; //  item-key will be key: order_docId will be value
 
-  console.log("deleteTasks.js job received: ", job);
+  console.log("deleteTasks.js job input: ", job);
   job.list.forEach(task => {
     var taskId = "";
     if (job.jobType === "deletePickTask") {

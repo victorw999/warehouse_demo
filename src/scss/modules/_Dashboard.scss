@@ -2,6 +2,12 @@
   &.container {
     padding: 1.5rem;
     background-color: white;
+
+    @media #{$small-and-down} {
+      padding: 0px !important;
+      margin: 0px;
+      width: 100%;
+    }
   }
   .selection_tabs {
     .tab a {
@@ -21,4 +27,11 @@
       background-color: color("teal", "base") !important;
     }
   } //selection_tabs
+
+  // 3 view's title
+  .diff_views_title {
+    @media #{$small-and-down} {
+      text-align: center;
+    }
+  }
 } //dashboard

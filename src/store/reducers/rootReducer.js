@@ -1,6 +1,4 @@
 import authReducer from "./authReducer";
-import projectReducer from "./projectReducer";
-import vicReducer from "./vicReducer";
 import orderReducer from "./orderReducer";
 import { combineReducers } from "redux";
 import { firestoreReducer } from "redux-firestore";
@@ -9,12 +7,10 @@ import jobReducer from "./jobReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  project: projectReducer,
-  victor: vicReducer,
   order: orderReducer,
+  job: jobReducer,
   firestore: firestoreReducer,
   firebase: firebaseReducer,
-  job: jobReducer
 });
 
 export default rootReducer;

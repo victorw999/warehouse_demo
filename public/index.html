@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0"
+    />
     <meta name="theme-color" content="#000000" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -39,7 +44,7 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-    <title>React App</title>
+    <title>Warehouse | AKWA</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -55,40 +60,6 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
 
-    <!-- <script type="text/JavaScript">
-
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll(".dropdown-trigger");
-      var instances = M.Dropdown.init(elems, options);
-    });
-  </script> -->
-
-    <script>
-      // document.addEventListener("DOMContentLoaded", function() {
-      //   var elems = document.querySelectorAll(".dropdown-trigger");
-      //   var instances = M.Dropdown.init(elems, { hover: true });
-      // });
-
-      $(document).ready(function() {
-        $(".dropdown-trigger").dropdown({
-          hover: true // Activate on hover
-        });
-
-        $("#testbutton").click(function() {
-          $(".test").hide();
-        });
-
-        $(".testbutton").click(function() {
-          alert(".testbutton");
-        });
-      });
-
-      // M.AutoInit();
-      // document.addEventListener("DOMContentLoaded", function() {
-      //   var elems = document.querySelectorAll(".dropdown-trigger");
-      //   var instances = M.Dropdown.init(elems, { hover: true });
-      // });
-    </script>
     <!-- add below for font-aweseom additional icons -->
     <script
       src="https://kit.fontawesome.com/c5a2762765.js"

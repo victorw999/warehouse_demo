@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+// SCSS
 import "./index.scss";
 import "./scss/base.scss";
 
@@ -22,14 +23,14 @@ const store = createStore(
     applyMiddleware(
       thunk.withExtraArgument({
         getFirebase,
-        getFirestore
+        getFirestore,
       })
     ),
     reduxFirestore(fbConfig), // redux bindings for firestore
     reactReduxFirebase(fbConfig, {
       useFirestoreForProfile: true,
       userProfile: "users",
-      attachAuthIsReady: true
+      attachAuthIsReady: true,
     }) // redux binding for firebase
   )
 );

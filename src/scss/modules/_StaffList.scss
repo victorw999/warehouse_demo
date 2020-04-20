@@ -1,19 +1,81 @@
 .stafflist {
+  // header format
+  .collapsible-header.staff_header {
+    margin: 0 !important;
+  }
   .collapsible-body {
     padding-top: 0;
     padding-bottom: 0;
   }
-  .staff_header .name {
-    font-size: 1rem;
-    text-transform: uppercase;
-    font-weight: 600;
+
+  // number of tasks btn
+  .collapsible_stafflist {
+    .name {
+      font-size: 1rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin: 0;
+    }
+    .numOfTasks {
+      text-align: center;
+    }
   }
+
+  // list.js
+  .user_list_item {
+    .item_qty {
+      font-weight: 900;
+      background: color("grey", "lighten-4");
+      color: color("teal", "base");
+      padding: 0px 0.5rem;
+      margin: 0.2rem 0.5rem;
+    }
+  }
+
+  // user_tasks_collap_body
+  .user_tasks_collap_body {
+    .staff_task.row {
+      .item_desc {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        .item_desc_row {
+          margin: 0.1rem 0rem;
+        }
+        .status_badge {
+          padding: 0.1rem 0.3rem;
+          margin: 0.2rem;
+        }
+      } // .item_desc
+
+      @media #{$medium-and-up} {
+        box-shadow: unset; // Remove Shadow
+      }
+    } // .staff_task.row
+
+    @media #{$small-and-down} {
+      .staff_task.row {
+        .order_desc,
+        .item_desc,
+        .actions_section {
+          text-align: center;
+        }
+
+        .item_desc {
+          align-items: center;
+        }
+      } // staff_task.row
+    } // END MOBILE @media #{$small-and-down}
+  } //. user_tasks_collap_body
 
   &.done_tasks_section {
     .collapsible-header {
       background-color: color("grey", "base") !important;
     }
   } // .done_task_section
+
+  // actions_section
   .actions_section {
     display: flex;
     flex-flow: row wrap;

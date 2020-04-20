@@ -15,6 +15,9 @@ class SignIn extends Component {
   };
   handleSubmit = e => {
     e.preventDefault();
+    // reset "showTab" in App.js whenever new user signed in
+    this.props.updateTab("orders");
+    console.log("signedin reset showtab");
     this.props.signIn(this.state);
   };
   render() {
@@ -58,7 +61,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

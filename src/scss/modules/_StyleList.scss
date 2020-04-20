@@ -8,10 +8,14 @@
   } // END: .collapsible.item-row
 
   .collapsible-item {
+    @media #{$medium-and-up} {
+      // padding-left: 1rem !important;
+    }
+
     @media #{$small-and-down} {
       // styles for small screens and down
-      padding-left: 1rem !important;
-      flex-wrap: wrap;
+      // padding-left: 1rem !important;
+      // flex-wrap: wrap;
     }
     .collapsible-header {
       .sku_qty {
@@ -25,7 +29,7 @@
         margin: 0;
       }
       @media #{$small-and-down} {
-        flex-direction: column;
+        // flex-direction: column;
         p {
           margin: 0;
         }

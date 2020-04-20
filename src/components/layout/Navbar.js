@@ -1,16 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import SignedInLinks from "./SignedInLinks";
 import SignedOutLinks from "./SignedOutLinks";
-// import Vicmod from "./Vicmod";
-// import ToggleByAuthor from "./ToggleByAuthor";
 import { connect } from "react-redux";
+import NavTabs from "./NavTabs";
 
-const Navbar = props => {
-  const { auth, profile } = props;
+const Navbar = (props) => {
+  const { auth, profile, updateTab, showTab } = props;
 
   const links = auth.uid ? (
-    <SignedInLinks profile={profile} />
+    <SignedInLinks profile={profile} auth={auth} />
   ) : (
     <SignedOutLinks />
   );
@@ -19,24 +18,35 @@ const Navbar = props => {
     <div className="navbar-fixed">
       <nav className="nav-wrapper grey darken-3">
         <div className="container">
-          <Link to="/" className="brand-logo">
+          <Link to="/" className="brand-logo akwa_logo ">
             AKWA
           </Link>
 
+          <div className="nav-content navtabs_wrapper center brand-logo">
+            <NavTabs
+              updateTab={updateTab}
+              profile={profile}
+              showTab={showTab}
+            />
+          </div>
+
           {links}
-          {/* <Vicmod /> */}
         </div>
       </nav>
     </div>
   );
 };
 
-const mapStateToProps = state => {
-  // console.log(state);
+const mapStateToProps = (state) => {
   return {
     auth: state.firebase.auth,
-    profile: state.firebase.profile
+    profile: state.firebase.profile,
   };
 };
 
-export default connect(mapStateToProps)(Navbar);
+/**
+ * "Navbar" component didn't have access to to react-router, (see App.js)
+ * so use "withRouter" to access react-router, so we know the current URL
+ * REF: https://stackoverflow.com/a/46735682/5844090
+ */
+export default withRouter(connect(mapStateToProps)(Navbar));

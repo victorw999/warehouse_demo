@@ -1,33 +1,3 @@
-export const createPickTask_bk1 = task => {
-  return (dispatch, getState, { getFirebase, getFirestore }) => {
-    // make async calls to db: add this order to firebase, b4 dispatch the action
-    const firestore = getFirestore();
-    const profile = getState().firebase.profile;
-    const authorId = getState().firebase.auth.uid;
-
-    task.itemlist.forEach(picktask_item => {
-      firestore
-        .collection("picktasks")
-        .add({
-          ...picktask_item,
-          status: "picking",
-          authorFirstName: profile.firstName,
-          authorLastName: profile.lastName,
-          authorId: authorId,
-          startTime: new Date()
-        })
-        .then(docRef => {
-          // console.log("new picktask created : ", docRef.id);
-          console.log("creating task for sku: ", picktask_item.sku);
-          console.log("creating task for sku: ", picktask_item);
-        })
-        .catch(err => {
-          // dispatch({ type: "CREATE_PICKTASK_ERROR", err });
-          console.log("pick task err! ", err);
-        });
-    }); // end forEach looping itemlist
-  };
-};
 /**
  *
  *  CREATE
@@ -66,7 +36,7 @@ export const createPickTask = task => {
 
     // commit task, then start updating orders
     batch.commit().then(() => {
-      updateOrdersAfterTasksAction(firestore, tempTasks, "create");
+      // updateOrdersAfterTasksAction(firestore, tempTasks, "create");
     }); // batch.commit()
   };
 };

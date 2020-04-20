@@ -1,9 +1,10 @@
-import { isOrderPacking } from "./func";
 /**
  * CREATE JOBS
+ * @desc - create job that'll trigger cloud func
+ *
  */
 export const createJob = (job, jobType, flag) => {
-  console.log("jobAction input: list = ", job);
+  console.log("jobActions.js => input ", job);
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     // make async calls to db: add this order to firebase, b4 dispatch the action
     const firestore = getFirestore();
@@ -42,7 +43,7 @@ export const createJob = (job, jobType, flag) => {
           ownerId: authorId,
           jobType: jobType, // create/update/deletePickTask, create/update/deletePackTask
           status: status_1, // picking, pick_complete, n/a, packing, pack_complete
-          flag: flag // contains info like "order_view"
+          flag: flag, // contains info like "order_view"
         };
         break;
       case "deletePickTask":
@@ -50,7 +51,7 @@ export const createJob = (job, jobType, flag) => {
         payload = {
           list: [...reduced_list],
           jobType: jobType,
-          flag: flag
+          flag: flag,
         };
         break;
       case "updatePickTask":
@@ -60,7 +61,7 @@ export const createJob = (job, jobType, flag) => {
           list: [...job.list],
           newStatus: job.newStatus,
           jobType: jobType,
-          flag: flag
+          flag: flag,
         };
         break;
       case "mixedPickTask":
@@ -68,67 +69,26 @@ export const createJob = (job, jobType, flag) => {
           list: [...job.list],
           jobType: jobType,
           flag: flag,
-          missing: job.missing,
+          missing: job.missing ? job.missing : 0,
           //
           owner: profile.firstName,
           initials: profile.initials,
-          ownerId: authorId
+          ownerId: authorId,
         };
         break;
-
+      case "importJSONOrders":
+        payload = {
+          list: [...job],
+          jobType,
+          flag,
+        };
+        break;
       default:
         payload = {};
     }
 
     console.log("jobActions.js => payload", payload);
     execute(firestore, payload, dispatch);
-
-    /**
-     * //idea abandoned, but keep as ref
-     * Set up async/await, when "deletePickTask"
-     * wait to see the result from 'tasks', if order status is 'packing'
-     */
-
-    /**
-     
-     var promises = [];
-    (async () => {
-      var orderIsPacking = false;
-
-      if (jobType === "deletePickTask") {
-        orderIsPacking = await isOrderPacking(job, firestore);
-        await console.log("func return result: ", orderIsPacking);
-      }
-
-      if (orderIsPacking) {
-        // already entered packing stage, prohib delete pick tasks
-        // return Promise.resolve("ORDER_IS_PACKING");
-        console.log("orderIsPacking is ", orderIsPacking);
-        await promises.push(Promise.resolve("ORDER_IS_PACKING"));
-      } else {
-        console.log("orderIsPacking is ", orderIsPacking);
-        await execute(firestore, payload, dispatch);
-      }
-    })();
-    return Promise.all(promises).then(r => {
-      console.log("jobActions() Promise.all() ", r);
-    });
-
-     */
-    /**
-     * END: async/await
-     */
-
-    /**
-     * idea abandoned, but keep as ref
-     * send dispatch to store
-     */
-    // if (jobType === "deletePickTask") {
-    //   dispatch({
-    //     type: "SET_JOB_FEEDBACK",
-    //     payload: { taskId: job[0].id, feedback: "ORDER_IS_PACKING" }
-    //   });
-    // }
   };
 };
 
@@ -162,7 +122,7 @@ const reduceList = (job, jobType, flag, profile) => {
           : flag === "staff_view"
           ? list[0].id
           : "task_id_unknown", // staff_view, info is from "tasks" collection
-      order_docId: list[0].order_docId
+      order_docId: list[0].order_docId,
     };
     result = [job_deletePack];
   } else {
@@ -170,7 +130,7 @@ const reduceList = (job, jobType, flag, profile) => {
      * others
      */
     result = job
-      .filter(i => {
+      .filter((i) => {
         if (flag === "staff_view") {
           return true; // staff view, no need check task owner
         }
@@ -181,14 +141,14 @@ const reduceList = (job, jobType, flag, profile) => {
           return false;
         }
       })
-      .map(j => {
+      .map((j) => {
         return {
           /**
            * when deletePickTask from Staff view, since it uses 'task' collection, each task has 'id' field, not 'pickId'
            */
           pickId: flag === "staff_view" ? j.id : j.pickId,
           key: j.key, // item-keys for update orders
-          order_docId: j.order_docId
+          order_docId: j.order_docId,
         };
       });
   }
@@ -211,7 +171,7 @@ const execute = (firestore, payload, dispatch) => {
     .then(() => {
       dispatch({ type: "CREATE_JOB", payload });
     })
-    .catch(err => {
+    .catch((err) => {
       dispatch({ type: "CREATE_JOB_ERROR", err });
     });
 };

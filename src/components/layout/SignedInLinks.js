@@ -1,67 +1,64 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { signOut } from "../../store/actions/authActions";
-import { Dropdown, Button, Divider, Icon } from "react-materialize";
+import NavRightBtns from "./NavRightBtns";
+import NavDropDown from "./NavDropDown";
+import { isSuper } from "../utilityFunc/functions";
 
-const buttonStyle = {
-  background: "none",
-  border: "none",
-  color: "white"
-};
-
-const SignedInLinks = props => {
+const SignedInLinks = ({ profile, signOut }) => {
   return (
-    <div>
-      <ul className="right">
-        {/* <!-- Dropdown Structure --> */}
+    <>
+      <div className="signedinlinks">
+        {/* 
+        
+          MOBILE VIEW
+        
+        */}
+        <ul className="right hide-on-large-only">
+          <li className="nav_btn mobile">
+            <NavDropDown
+              id={"mobile_view"}
+              signOut={signOut}
+              btnStyle={"transparent"}
+              isSuper={isSuper(profile)}
+              profile={profile}
+            />
+          </li>
+        </ul>
 
-        <li>
-          <Dropdown
-            className="nav_dropdown  "
-            trigger={
-              <Button floating className="nav_dropdown_btn">
-                <i className="material-icons"> add </i>
-              </Button>
-            }
-          >
-            {/* <a href="/create">New Project</a>
-            <a href="/createorder">New Order</a> */}
-            <NavLink to="/create">New Project</NavLink>
-            <NavLink to="/createorder">New Order</NavLink>
-          </Dropdown>
-        </li>
-        {/* end dropdown */}
+        {/* 
+        
+          PC VIEW
+        
+        */}
+        <ul className="right hide-on-med-and-down">
+          <NavRightBtns profile={profile} isSuper={isSuper} signOut={signOut} />
+          {/* 
+          <!-- Dropdown Structure --> 
+          */}
 
-        {/* <li>
-          <NavLink to="/create">New Project</NavLink>
-        </li>
-        <li>
-          <NavLink to="/createorder">New Order</NavLink>
-        </li> */}
-        <li>
-          <Button floating className="nav_dropdown_btn">
-            <i className="material-icons"> insert_chart </i>
-          </Button>
-        </li>
-        <li>
-          <button href="#" onClick={props.signOut} style={buttonStyle}>
-            Log Out
-          </button>
-        </li>
-        <li>
-          <NavLink to="/" className="btn btn-floating pink lighten-1">
-            {props.profile.initials}
-          </NavLink>
-        </li>
-      </ul>
-    </div>
+          <li className="nav_btn pc">
+            <NavDropDown
+              id={"pc_view"}
+              signOut={signOut}
+              btnStyle={" "}
+              isSuper={isSuper(profile)}
+              profile={profile}
+            />
+          </li>
+
+          {/* end dropdown */}
+        </ul>
+        {/* END: ul.right */}
+      </div>
+      {/* END: div.signedinlinks */}
+    </>
   );
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    signOut: () => dispatch(signOut())
+    signOut: () => dispatch(signOut()),
   };
 };
 

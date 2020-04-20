@@ -1,208 +1,92 @@
+/* eslint-disable no-loop-func */
 const admin = require("firebase-admin");
 const db = admin.firestore();
+const updateList = require("./updateOrder/updateList");
+
 /**
  *
  * update order using "transaction"
  */
 
 module.exports = (tasksObj, jobType, flag) => {
-  console.log("updateOrderViaTransaction() ==> tasksObj: ", tasksObj);
-  console.log(
-    `updateOrderViaTransaction() ==> jobType: ${jobType}, flag: ${flag}`
-  );
+  var fileP = "*UOVT.js: "; // current file prompt
+  //
+  console.log(`${fileP} tasksObj: `, tasksObj);
+  console.log(`${fileP} jobType: ${jobType}, flag: ${flag}`);
   return db
     .runTransaction(transaction => {
-      return Promise.all(
-        // looping "tasksObj"
-        Object.keys(tasksObj).map(async key => {
-          var order_docId = tasksObj[key].order_docId;
-          var orderRef = db.doc(`orders/${order_docId}`);
-
-          /**
-           *  await # 1 : retrieve order
-           */
-          const get_result = await transaction.get(orderRef).then(doc => {
-            if (!doc.exists) {
-              throw "no doc";
-            }
-            var order_itemlist = [...doc.data().itemlist];
-            /**
-             *    looping itemlist
-             */
-            for (let i = 0; i < order_itemlist.length; i++) {
-              var status = order_itemlist[i].status;
-              var key = order_itemlist[i].key;
-              var isKeyExist = key in tasksObj; // check if current itemkey is in taskObj{}
-              var breakIfSameStyle = false; // if item is found & "style_view", then break the loop
-
-              /**
-               *  CREAT PICK TASK (order_view & style_view)
-               */
-              if (jobType === "createPickTask" && (!status || status === "")) {
-                if (isKeyExist) {
-                  let task = tasksObj[key];
-                  order_itemlist[i] = {
-                    ...order_itemlist[i],
-                    status: task.status,
-                    picker: task.owner,
-                    picker_init: task.initials,
-                    pickId: task.id
-                  };
-                  breakIfSameStyle =
-                    flag === "style_view"
-                      ? true
-                      : flag === "order_view"
-                      ? false
-                      : "";
-                }
-              } else if (
-                /**
-                 *  DELETE PICK TASK (order_view & style_view)
-                 */
-                jobType === "deletePickTask" &&
-                (status === "picking" ||
-                  status === "pick_complete" ||
-                  status === "n/a")
-              ) {
-                if (isKeyExist) {
-                  order_itemlist[i] = {
-                    ...order_itemlist[i],
-                    status: "",
-                    picker: "",
-                    picker_init: "",
-                    pickId: ""
-                  };
-                  breakIfSameStyle =
-                    flag === "style_view"
-                      ? true
-                      : flag === "order_view"
-                      ? false
-                      : "";
-                }
-              } else if (jobType === "updatePickTask") {
-                /**
-                 *  UDPATE PICK TASK
-                 */
-                if (isKeyExist) {
-                  order_itemlist[i] = {
-                    ...order_itemlist[i],
-                    status: tasksObj[key].status
-                  };
-                  breakIfSameStyle = true;
-                }
-              } else if (jobType === "mixedPickTask") {
-                /**
-                 *  MIXED TASK OPERATIONS
-                 */
-                if (isKeyExist) {
-                  let item_jobType = tasksObj[key].item_jobType;
-                  if (item_jobType === "createPickTask") {
-                    console.log(" item_jobType ===>  createPickTasks  ", key);
-                    let task = tasksObj[key];
-                    order_itemlist[i] = {
-                      ...order_itemlist[i],
-                      status: task.status,
-                      picker: task.owner,
-                      picker_init: task.initials,
-                      pickId: task.id
-                    };
-                  } else if (item_jobType === "updatePickTask") {
-                    console.log(" item_jobType ===>  updatePickTasks  ", key);
-                    order_itemlist[i] = {
-                      ...order_itemlist[i],
-                      status: tasksObj[key].status
-                    };
-                  }
-                  breakIfSameStyle = true;
-                }
-              } else if (
-                jobType === "createPackTask" &&
-                status === "pick_complete"
-              ) {
-                /**
-                 *  CREAT PACK (order_view)
-                 *  loop thru all items and assign them new status
-                 *  "pack" tasksObj only have 1 key-value pair, its key is order_docId
-                 */
-                let task = Object.values(tasksObj)[0];
-                order_itemlist[i] = {
-                  ...order_itemlist[i],
-                  status: task.status,
-                  packer: task.owner,
-                  packer_init: task.initials,
-                  packId: task.id
-                };
-                console.log(
-                  "pack status updated!  jobType='updatePickTask' ",
-                  order_itemlist[i].key
-                );
-              } else if (jobType === "updatePackTask") {
-                /**
-                 *  UDPATE PACK TASK / COMPLETE PACK  (staff_view)
-                 *  loop thru all items and assign them new status
-                 *  "pack" tasksObj only have 1 key-value pair, its key is order_docId
-                 */
-                let task = Object.values(tasksObj)[0];
-                order_itemlist[i] = {
-                  ...order_itemlist[i],
-                  status: task.status
-                };
-                console.log(
-                  "pack status updated!  jobType='updatePackTask' ",
-                  order_itemlist[i].key
-                );
-              } else if (
-                /**
-                 *  DELETE PACK TASK (order_view/staff_view)
-                 */
-                jobType === "deletePackTask" &&
-                (status === "packing" || status === "pack_complete")
-              ) {
-                /**
-                 *  Reset ALL items:
-                 *  when "deletePackTask", the key of "tasksObj" is "order_docId"
-                 */
-                order_itemlist[i] = {
-                  ...order_itemlist[i],
-                  status: "pick_complete",
-                  packer: "",
-                  packer_init: "",
-                  packId: ""
-                };
-                console.log(
-                  "updateOrderViaTransaction() pack status reseted: ",
-                  order_itemlist[i].key,
-                  order_itemlist[i].status
-                );
-              } else {
-                //  NO CONDITION MATCHED!
-                console.log(
-                  "updateOrderViaTransaction() ==> NO CONDITION MATCHED!",
-                  order_itemlist[i]
-                );
-              }
-
-              if (flag === "style_view" && breakIfSameStyle) {
-                break; // if same styles, diff orders, then break the loop
-              }
-            } // end looping order_itemlist
-
-            return Promise.resolve({
-              orderRef: orderRef,
-              order_itemlist: order_itemlist
-            });
-          });
-          // end: transaction.get()
-
-          console.log("updateOrderViaTransaction()...updating");
-          // await # 2
-          return await transaction.update(get_result.orderRef, {
-            itemlist: get_result.order_itemlist
-          });
-        }) // END:  // looping "tasksObj"
-      ); // END: Promise.all
+      /**
+       * multi_loop:    for tasks belongs to multiple order documents
+       * single_loop:   for tasks belongs to same order doc
+       * these 2 var are array, which hold the "results (promises)" returned by transaction update,
+       * then these 2 var will be proccessed by Promise.all()
+       */
+      var multi_loop, single_loop;
 
       /**
+       * Depending on flags/jobType, it'll choose single_loop or multi_loop
+       */
+      if (
+        (flag === "order_view" && jobType === "mixedPickTask") ||
+        (flag === "order_view" && jobType === "createPickTask") ||
+        (flag === "order_view" && jobType === "deletePickTask")
+      ) {
+        /**
+         * SINGLE_LOOP
+         */
+        console.log(`${fileP} ===> SINGLE_LOOP`);
+        var keys = Object.keys(tasksObj);
+        var singleKey = [keys[0]];
+        single_loop = singleKey.map(async key => {
+          let orderRef = db.doc(`orders/${tasksObj[key].order_docId}`);
+          // await # 1 : @return an updated itemlist
+          var get_result = await getOrder(
+            transaction,
+            orderRef,
+            tasksObj,
+            key,
+            jobType,
+            flag
+          );
+
+          // await # 2 :  update order
+          return await transaction.update(orderRef, {
+            itemlist: get_result
+          });
+        }); // END: looping "tasksObj" via map()
+
+        return Promise.all(single_loop);
+      } else {
+        /**
+         * MULTI_LOOP
+         */
+        console.log(`${fileP} ===> MULTI_LOOP`);
+        multi_loop = Object.keys(tasksObj).map(async key => {
+          let orderRef = db.doc(`orders/${tasksObj[key].order_docId}`);
+          await console.log(
+            `${fileP} ===> process order_docId:${tasksObj[key].order_docId}`
+          );
+          // await # 1 : @return an updated itemlist
+          var get_result = await getOrder(
+            transaction,
+            orderRef,
+            tasksObj,
+            key,
+            jobType,
+            flag
+          );
+
+          // await # 2 :  update order
+          return await transaction.update(orderRef, {
+            itemlist: get_result
+          });
+        }); // END: looping "tasksObj" via map()
+
+        return Promise.all(multi_loop);
+      } // END: if
+
+      /**
+       *
        * if want to chain another, here is the tutorial:
        * ref: https://stackoverflow.com/a/57653880/5844090
        *  /**
@@ -211,14 +95,56 @@ module.exports = (tasksObj, jobType, flag) => {
        */
     }) // end: runTransaction()
     .then(() => {
-      // console.log("Transaction: updated 'order' for ", picktask_item.sku);
-      console.log("updateOrderViaTransaction()...done");
+      console.log(`${fileP} Transaction Done`);
     })
-    .catch(function(error) {
-      console.log("Transaction failed: ", error);
+    .catch(error => {
+      console.log(`${fileP} Transaction Failed: `, error);
     });
-
   /**
    * transaction end
    */
+};
+
+/**
+ *
+ * retrieve order
+ * @return a newly updated itemlist
+ */
+
+const getOrder = (transaction, orderRef, tasksObj, key, jobType, flag) => {
+  var fileP = "*UOVT.js: 'getOrder()'"; // current file prompt
+
+  return transaction
+    .get(orderRef)
+    .then(doc => {
+      if (!doc.exists) {
+        throw new Error("no doc");
+      }
+
+      // retrieve itemlist frm current order
+      var order_itemlist = [...doc.data().itemlist];
+
+      //
+      console.log(`${fileP} ---------------------------------------- `);
+      console.log(`${fileP} - orig itemlist:`, order_itemlist);
+      //
+
+      // based on flag & jobType, returns a "renewed array"
+      order_itemlist = updateList(order_itemlist, tasksObj, key, jobType, flag);
+
+      //
+      console.log(`${fileP} - updated itemlist:`, order_itemlist);
+      //
+
+      return new Promise((resolve, reject) => {
+        if (true) {
+          resolve([...order_itemlist]);
+        }
+        reject("nothing");
+      });
+    })
+    .catch(e => {
+      console.log(`${fileP} error when getting order ref`, e);
+    });
+  // end: transaction.get()
 };

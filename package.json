@@ -1,5 +1,5 @@
 {
-  "name": "akwa_marioplan",
+  "name": "warehouse_demo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,6 +9,7 @@
     "moment": "^2.22.2",
     "node-sass": "^4.13.0",
     "react": "^16.4.1",
+    "react-csv": "^2.0.1",
     "react-dom": "^16.4.1",
     "react-materialize": "^3.3.4",
     "react-redux": "5.0.7",

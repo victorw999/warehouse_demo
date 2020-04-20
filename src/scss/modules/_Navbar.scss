@@ -1,0 +1,61 @@
+.navbar-fixed {
+  // hide logo when screen is small
+  @media only screen and (max-width: 992px) {
+    .akwa_logo {
+      display: none;
+    }
+  }
+
+  // FAB: floating action buttons
+  .nav_fab_wrapper {
+    position: relative;
+    height: 54px;
+    line-height: 54px;
+    @media only screen and (min-width: 601px) {
+      height: 64px;
+      line-height: 64px;
+    }
+
+    .fixed-action-btn {
+      position: absolute;
+
+      // center icon vertically
+      top: 0px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      // adjust red icon size for mobile
+      .btn-floating.btn-large.red {
+        width: 46px;
+        height: 46px;
+
+        @media only screen and (min-width: 601px) {
+          width: 56px;
+          height: 56px;
+        }
+
+        i {
+          line-height: 46px;
+          @media only screen and (min-width: 601px) {
+            line-height: 56px;
+          }
+        }
+      } // red btn
+
+      // ul
+      .fab_ul {
+        li {
+          // clear out some of inheritance
+          float: none !important;
+          // background: red;
+          margin-top: 0px;
+          margin-right: 15px; //spacing
+          a {
+            margin: 0px !important;
+          }
+        }
+      } // ..fab_ul
+    } // .fixed-action-btn
+  } //.nav_fab_wrapper
+} // navbar-fixed

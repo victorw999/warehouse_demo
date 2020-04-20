@@ -126,7 +126,6 @@ export const createOrder = order => {
     firestore
       .collection("orders")
       .add({
-        // this will automatically generate a document id on firestore
         ...order,
         authorFirstName: profile.firstName,
         authorLastName: profile.lastName,

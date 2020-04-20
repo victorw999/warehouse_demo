@@ -31,8 +31,11 @@ module.exports = job => {
       owner: job.owner,
       initials: job.initials,
       ownerId: job.ownerId,
-      id: newRef.id // new task's ref id
+      id: newRef.id, // new task's ref id
       // implemenet TIME logic
+      time: {
+        start: getTimeStamp()
+      }
     };
     tasksObj[newKey] = newTask;
     batch_add.set(newRef, newTask);
@@ -53,4 +56,12 @@ module.exports = job => {
     .catch(e => {
       console.error("createTasks(): ", e);
     });
+};
+
+/**
+ * getTimeStamp
+ */
+const getTimeStamp = () => {
+  // let rand = Math.floor(Math.random() * Math.floor(100));
+  return new Date(); //firebase Timestamp obj
 };

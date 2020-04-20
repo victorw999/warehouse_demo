@@ -1,44 +1,113 @@
 .OrderSummary_row,
 .OrderSummaryDone_row {
+  padding: 0rem !important;
+  margin: 1rem 0.5rem !important;
+  background: color("grey", "lighten-4") !important;
+
+  .ordersummary_detail,
+  .itemsdetail,
+  .actions_section {
+    padding: 0rem !important;
+  }
+
+  // Column: Decription
+  .ordersummary_detail {
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    .description {
+      @media #{$small-and-down} {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      span {
+        display: block;
+
+        font-size: 1rem;
+        // line-height: 1.8rem;
+        background: color("grey", "lighten-4");
+        @media #{$small-and-down} {
+          &.amzId {
+            flex: 1 1 100%; // make it always in its own line
+          }
+          display: inline-block;
+          text-align: center;
+          // background: color("grey", "lighten-4");
+          // border: 1px white solid;
+          // border-radius: 2px;
+
+          padding: 0.1rem 1rem;
+          margin: 0.1rem 0.2rem;
+          font-size: 0.8rem;
+        }
+      } //span
+    } //.description
+  } //.ordersummary_detail
+
+  // Column: ITEMLIST DETAIL
   .itemsdetail {
     text-transform: capitalize;
+
+    .task_status,
+    .itemlist {
+      margin: 0.5rem 0;
+    }
+    .itemlist {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      background-color: unset !important;
+      padding: 0 !important;
+      border: none !important;
+
+      // EACH single item
+      .single_item {
+        // SKU
+        .sku {
+          font-weight: 700;
+          // font-size: 1.2rem;
+        }
+        // Quantity
+        .item_qty {
+          padding: 0px 0.5rem;
+          margin: 0.2rem 0.5rem;
+          font-weight: 900;
+          background: white;
+        }
+      } //.single_item
+
+      // depends on item's status, display icons
+      .status i {
+        font-size: 19px !important;
+        &.picking,
+        &.packing {
+          color: color("blue", "base") !important;
+        }
+        &.pick_complete,
+        &.pack_complete {
+          color: color("green", "base") !important;
+        }
+      } // .status i
+      .picker_init {
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        margin-left: 0.2rem;
+      }
+    } // itemlist
   } //itemsdetail
-  .itemlist {
-    background-color: unset !important;
-    padding: 0 !important;
-    border: none !important;
 
-    .item_qty {
-      padding: 0px 1rem;
-      font-weight: 900;
-    }
-    // depends on item's status, display icons
-    .status i {
-      font-size: 19px !important;
-      &.picking,
-      &.packing {
-        color: color("blue", "base") !important;
-      }
-      &.pick_complete,
-      &.pack_complete {
-        color: color("green", "base") !important;
-      }
-    } // .status i
-    .picker_init {
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      margin-left: 0.2rem;
-    }
-  } // .itemlist
-
+  // Column: Actions
   .actions_section {
     display: flex;
     flex-flow: column wrap;
     align-items: center;
     justify-content: space-evenly;
-    height: 10rem;
+    // height: 10rem;
     @media #{$medium-and-down} {
-      height: 20rem;
+      flex-flow: row wrap;
+      // height: 20rem;
     }
 
     // better make button into 2 rows so on mobile easy to click
