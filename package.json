@@ -8,6 +8,7 @@
     "materialize-css": "^1.0.0",
     "moment": "^2.22.2",
     "node-sass": "^4.13.1",
+    "npm-audit-html": "^1.4.1",
     "react": "^16.4.1",
     "react-csv": "^2.0.1",
     "react-dom": "^16.4.1",

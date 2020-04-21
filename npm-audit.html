@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+        integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/atom-one-dark.min.css">
+
+    <title>NPM Audit Report</title>
+    <meta name="description" content="104 known vulnerabilities found.">
+
+    <style>
+        pre {
+            background-color: #333333;
+            padding: 15px;
+        }
+
+        pre code {
+            color: #fff;
+        }
+    </style>
+
+</head>
+
+<body class="mb-3">
+    <div class="container">
+        <h1 class="mt-5 text-center">NPM Audit Report</h1>
+
+        <div class="text-center">
+            <div class="card-deck my-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            104
+                        </h5>
+                        <p class="card-text">Known vulnerabilities</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            35,604
+                        </h5>
+                        <p class="card-text">Dependencies</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            April 21st 2020, 10:27:48 pm
+                        </h5>
+                        <p class="card-text">Last updated</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck my-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            0
+                        </h5>
+                        <p class="card-text">
+                            <span class="badge badge-danger">critical</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            6
+                        </h5>
+                        <p class="card-text">
+                            <span class="badge badge-warning">high</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            11
+                        </h5>
+                        <p class="card-text">
+                            <span class="badge badge-secondary">moderate</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            87
+                        </h5>
+                        <p class="card-text">
+                            <span class="badge badge-primary">low</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            0
+                        </h5>
+                        <p class="card-text">
+                            <span class="badge badge-info">info</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+
+                <table id="advisories" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Module</th>
+                            <th scope="col">Severity</th>
+                            <th scope="col">CVEs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <a href="https://npmjs.com/advisories/725" data-toggle="modal" data-target="#advisory-modal-725">Missing Origin Validation</a>
+                            </th>
+                            <td>
+                                <a href="https://npmjs.com/package/webpack-dev-server" target="_blank"
+                                    rel="noopener">webpack-dev-server</a>
+                            </td>
+                            <td data-order="2"><span
+                                    class="badge badge-warning">high</span></td>
+                            <td>
+                                CWE-346
+                                , CVE-2018-14732
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <a href="https://npmjs.com/advisories/786" data-toggle="modal" data-target="#advisory-modal-786">Regular Expression Denial of Service</a>
+                            </th>
+                            <td>
+                                <a href="https://npmjs.com/package/braces" target="_blank"
+                                    rel="noopener">braces</a>
+                            </td>
+                            <td data-order="4"><span
+                                    class="badge badge-primary">low</span></td>
+                            <td>
+                                CWE-185
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <a href="https://npmjs.com/advisories/803" data-toggle="modal" data-target="#advisory-modal-803">Arbitrary File Overwrite</a>
+                            </th>
+                            <td>
+                                <a href="https://npmjs.com/package/tar" target="_blank"
+                                    rel="noopener">tar</a>
+                            </td>
+                            <td data-order="2"><span
+                                    class="badge badge-warning">high</span></td>
+                            <td>
+                                CWE-59
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <a href="https://npmjs.com/advisories/817" data-toggle="modal" data-target="#advisory-modal-817">Cross-Site Scripting</a>
+                            </th>
+                            <td>
+                                <a href="https://npmjs.com/package/materialize-css" target="_blank"
+                                    rel="noopener">materialize-css</a>
+                            </td>
+                            <td data-order="3"><span
+                                    class="badge badge-secondary">moderate</span></td>
+                            <td>
+                                CWE-79
+                                , CVE-2019-11003
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <a href="https://npmjs.com/advisories/818" data-toggle="modal" data-target="#advisory-modal-818">Cross-Site Scripting</a>
+                            </th>
+                            <td>
+                                <a href="https://npmjs.com/package/materialize-css" target="_blank"
+                                    rel="noopener">materialize-css</a>
+                            </td>
+                            <td data-order="3"><span
+                                    class="badge badge-secondary">moderate</span></td>
+                            <td>
+                                CWE-79
+                                , CVE-2019-11002
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <a href="https://npmjs.com/advisories/1179" data-toggle="modal" data-target="#advisory-modal-1179">Prototype Pollution</a>
+                            </th>
+                            <td>
+                                <a href="https://npmjs.com/package/minimist" target="_blank"
+                                    rel="noopener">minimist</a>
+                            </td>
+                            <td data-order="4"><span
+                                    class="badge badge-primary">low</span></td>
+                            <td>
+                                CWE-471
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <a href="https://npmjs.com/advisories/1426" data-toggle="modal" data-target="#advisory-modal-1426">Cross-Site Scripting</a>
+                            </th>
+                            <td>
+                                <a href="https://npmjs.com/package/serialize-javascript" target="_blank"
+                                    rel="noopener">serialize-javascript</a>
+                            </td>
+                            <td data-order="3"><span
+                                    class="badge badge-secondary">moderate</span></td>
+                            <td>
+                                CWE-79
+                                , CVE-2019-16769
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <a href="https://npmjs.com/advisories/1488" data-toggle="modal" data-target="#advisory-modal-1488">Regular Expression Denial of Service</a>
+                            </th>
+                            <td>
+                                <a href="https://npmjs.com/package/acorn" target="_blank"
+                                    rel="noopener">acorn</a>
+                            </td>
+                            <td data-order="3"><span
+                                    class="badge badge-secondary">moderate</span></td>
+                            <td>
+                                CWE-400
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" tabindex="-1" role="dialog" id="advisory-modal-725">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span class="badge badge-warning">high</span>
+                        Missing Origin Validation
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Module:
+                                    <a href="https://npmjs.com/package/webpack-dev-server" target="_blank"
+                                        rel="noopener">webpack-dev-server</a>
+                                </li>
+                                <li>Published: November 7th 2018 </li>
+                                <li>Reported by: Jiantao Li</li>
+                                <li>CWE-346</li>
+                                <li>CVE-2018-14732</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Vulnerable: &lt;2.11.4 || &gt;&#x3D;3.0.0 &lt;&#x3D;3.1.10</li>
+                                <li>Patched: &gt;&#x3D;2.11.4 &lt;3.0.0 || &gt;&#x3D;3.1.11</li>
+                                <li>Exploitability: 5</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>Overview</h3>
+                    <p class="card-text"><p>Versions of <code>webpack-dev-server</code> before 3.1.10 are missing origin validation on the websocket server. This vulnerability allows a remote attacker to steal a developer&#39;s source code because the origin of requests to the websocket server that is used for Hot Module Replacement (HMR) are not validated.</p>
+</p>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        <li>react-scripts&gt;webpack-dev-server </li>
+                    </ul>
+
+                    <h3>Remediation</h3>
+                    <p class="card-text"><p>For <code>webpack-dev-server</code> 2.x update to version 2.11.4 or later.
+For <code>webpack-dev-server</code> 3.x update to version 3.1.11 or later.</p>
+</p>
+                     
+                    <h3>References</h3>
+                    <p class="card-text"><ul>
+<li><a href="https://blog.cal1.cn/post/Sniffing%20Codes%20in%20Hot%20Module%20Reloading%20Messages">Sniffing Codes in Hot Module Reloading Messages</a></li>
+<li><a href="https://github.com/webpack/webpack-dev-server/commit/f18e5adf123221a1015be63e1ca2491ca45b8d10">GitHub commit</a></li>
+</ul>
+</p>
+                     
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-raised mr-2 btn-primary" href="https://npmjs.com/advisories/725" target="_blank" rel="noopener">More about
+                        this vulnerability</a>
+                    <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="advisory-modal-786">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span class="badge badge-primary">low</span>
+                        Regular Expression Denial of Service
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Module:
+                                    <a href="https://npmjs.com/package/braces" target="_blank"
+                                        rel="noopener">braces</a>
+                                </li>
+                                <li>Published: February 15th 2019 </li>
+                                <li>Reported by: Santosh Rao</li>
+                                <li>CWE-185</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Vulnerable: &lt;2.3.1</li>
+                                <li>Patched: &gt;&#x3D;2.3.1</li>
+                                <li>Exploitability: 4</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>Overview</h3>
+                    <p class="card-text"><p>Versions of <code>braces</code> prior to 2.3.1 are vulnerable to Regular Expression Denial of Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular expressions. This can cause the application to be unresponsive leading to Denial of Service.</p>
+</p>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        <li>react-scripts&gt;babel-jest&gt;babel-plugin-istanbul&gt;test-exclude&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;babel-jest&gt;babel-plugin-istanbul&gt;test-exclude&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;babel-jest&gt;babel-plugin-istanbul&gt;test-exclude&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;babel-jest&gt;babel-plugin-istanbul&gt;test-exclude&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;babel-jest&gt;babel-plugin-istanbul&gt;test-exclude&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;babel-plugin-istanbul&gt;test-exclude&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;babel-plugin-istanbul&gt;test-exclude&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;jest-environment-jsdom&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;jest-environment-jsdom&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;jest-environment-jsdom&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;jest-environment-jsdom&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-environment-jsdom&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;jest-environment-node&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;jest-environment-node&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;jest-environment-node&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;jest-environment-node&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;jest-jasmine2&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;jest-jasmine2&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;jest-jasmine2&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;jest-jasmine2&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-jasmine2&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-util&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;jest-jasmine2&gt;expect&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;jest-jasmine2&gt;expect&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;jest-jasmine2&gt;expect&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;jest-jasmine2&gt;expect&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-jasmine2&gt;expect&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;jest-jasmine2&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;jest-jasmine2&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;jest-jasmine2&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;jest-jasmine2&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-jasmine2&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;jest-jasmine2&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;jest-jasmine2&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;jest-jasmine2&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;jest-jasmine2&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-jasmine2&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-resolve-dependencies&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-snapshot&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-message-util&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-haste-map&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-haste-map&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-haste-map&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-haste-map&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;micromatch&gt;braces </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;micromatch&gt;braces </li>
+                    </ul>
+
+                    <h3>Remediation</h3>
+                    <p class="card-text"><p>Upgrade to version 2.3.1 or higher.</p>
+</p>
+                     
+                    <h3>References</h3>
+                    <p class="card-text"><ul>
+<li><a href="https://github.com/micromatch/braces/commit/abdafb0cae1e0c00f184abbadc692f4eaa98f451">GitHub Commit</a></li>
+</ul>
+</p>
+                     
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-raised mr-2 btn-primary" href="https://npmjs.com/advisories/786" target="_blank" rel="noopener">More about
+                        this vulnerability</a>
+                    <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="advisory-modal-803">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span class="badge badge-warning">high</span>
+                        Arbitrary File Overwrite
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Module:
+                                    <a href="https://npmjs.com/package/tar" target="_blank"
+                                        rel="noopener">tar</a>
+                                </li>
+                                <li>Published: April 4th 2019 </li>
+                                <li>Reported by: Max Justicz</li>
+                                <li>CWE-59</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Vulnerable: &lt;2.2.2 || &gt;&#x3D;3.0.0 &lt;4.4.2</li>
+                                <li>Patched: &gt;&#x3D;2.2.2 &lt;3.0.0 || &gt;&#x3D;4.4.2</li>
+                                <li>Exploitability: 5</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>Overview</h3>
+                    <p class="card-text"><p>Versions of <code>tar</code> prior to 4.4.2 for 4.x and 2.2.2 for 2.x are vulnerable to Arbitrary File Overwrite. Extracting tarballs containing a hardlink to a file that already exists in the system, and a file that matches the hardlink will overwrite the system&#39;s file with the contents of the extracted file.</p>
+</p>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        <li>react-scripts&gt;fsevents&gt;node-pre-gyp&gt;tar </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;tar </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;tar </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;tar </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;tar </li>
+                    </ul>
+
+                    <h3>Remediation</h3>
+                    <p class="card-text"><p>For tar 4.x, upgrade to version 4.4.2 or later.
+For tar 2.x, upgrade to version 2.2.2 or later.</p>
+</p>
+                     
+                    <h3>References</h3>
+                    <p class="card-text"><ul>
+<li><a href="https://hackerone.com/reports/344595">HackerOne Report</a></li>
+</ul>
+</p>
+                     
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-raised mr-2 btn-primary" href="https://npmjs.com/advisories/803" target="_blank" rel="noopener">More about
+                        this vulnerability</a>
+                    <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="advisory-modal-817">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span class="badge badge-secondary">moderate</span>
+                        Cross-Site Scripting
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Module:
+                                    <a href="https://npmjs.com/package/materialize-css" target="_blank"
+                                        rel="noopener">materialize-css</a>
+                                </li>
+                                <li>Published: April 17th 2019 </li>
+                                <li>Reported by: lucianot54</li>
+                                <li>CWE-79</li>
+                                <li>CVE-2019-11003</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Vulnerable: &gt;&#x3D;0.0.0</li>
+                                <li>Patched: &lt;0.0.0</li>
+                                <li>Exploitability: 3</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>Overview</h3>
+                    <p class="card-text"><p>All versions of <code>materialize-css</code> are vulnerable to Cross-Site Scripting. The <code>autocomplete</code> component does not sufficiently sanitize user input, allowing an attacker to execute arbitrary JavaScript code if the malicious input is rendered by a user.</p>
+</p>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        <li>materialize-css </li>
+                    </ul>
+
+                    <h3>Remediation</h3>
+                    <p class="card-text"><p>No fix is currently available. Consider using an alternative module until a fix is made available.</p>
+</p>
+                     
+                    <h3>References</h3>
+                    <p class="card-text"><ul>
+<li><a href="https://github.com/Dogfalo/materialize/issues/6286">GitHub Issue</a></li>
+<li><a href="https://snyk.io/vuln/SNYK-JS-MATERIALIZECSS-174144">Snyk Report</a></li>
+</ul>
+</p>
+                     
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-raised mr-2 btn-primary" href="https://npmjs.com/advisories/817" target="_blank" rel="noopener">More about
+                        this vulnerability</a>
+                    <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="advisory-modal-818">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span class="badge badge-secondary">moderate</span>
+                        Cross-Site Scripting
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Module:
+                                    <a href="https://npmjs.com/package/materialize-css" target="_blank"
+                                        rel="noopener">materialize-css</a>
+                                </li>
+                                <li>Published: April 17th 2019 </li>
+                                <li>Reported by: lucianot54</li>
+                                <li>CWE-79</li>
+                                <li>CVE-2019-11002</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Vulnerable: &gt;&#x3D;0.0.0</li>
+                                <li>Patched: &lt;0.0.0</li>
+                                <li>Exploitability: 3</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>Overview</h3>
+                    <p class="card-text"><p>All versions of <code>materialize-css</code> are vulnerable to Cross-Site Scripting. The <code>tooltip</code> component does not sufficiently sanitize user input, allowing an attacker to execute arbitrary JavaScript code if the malicious input is rendered by a user.</p>
+</p>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        <li>materialize-css </li>
+                    </ul>
+
+                    <h3>Remediation</h3>
+                    <p class="card-text"><p>No fix is currently available. Consider using an alternative module until a fix is made available.</p>
+</p>
+                     
+                    <h3>References</h3>
+                    <p class="card-text"><ul>
+<li><a href="https://github.com/Dogfalo/materialize/issues/6286">GitHub Issue</a></li>
+<li><a href="https://snyk.io/vuln/SNYK-JS-MATERIALIZECSS-174148">Snyk Report</a></li>
+</ul>
+</p>
+                     
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-raised mr-2 btn-primary" href="https://npmjs.com/advisories/818" target="_blank" rel="noopener">More about
+                        this vulnerability</a>
+                    <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="advisory-modal-1179">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span class="badge badge-primary">low</span>
+                        Prototype Pollution
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Module:
+                                    <a href="https://npmjs.com/package/minimist" target="_blank"
+                                        rel="noopener">minimist</a>
+                                </li>
+                                <li>Published: September 23rd 2019 </li>
+                                <li>Reported by: Checkmarx Research Team</li>
+                                <li>CWE-471</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Vulnerable: &lt;0.2.1 || &gt;&#x3D;1.0.0 &lt;1.2.3</li>
+                                <li>Patched: &gt;&#x3D;0.2.1 &lt;1.0.0 || &gt;&#x3D;1.2.3</li>
+                                <li>Exploitability: 1</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>Overview</h3>
+                    <p class="card-text"><p>Affected versions of <code>minimist</code> are vulnerable to prototype pollution. Arguments are not properly sanitized, allowing an attacker to modify the prototype of <code>Object</code>, causing the addition or modification of an existing property that will exist on all objects.<br>Parsing the argument <code>--__proto__.y=Polluted</code> adds a <code>y</code> property with value <code>Polluted</code> to all objects. The argument <code>--__proto__=Polluted</code> raises and uncaught error and crashes the application.<br>This is exploitable if attackers have control over the arguments being passed to <code>minimist</code>.</p>
+</p>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        <li>firebase&gt;@firebase/firestore&gt;grpc&gt;node-pre-gyp&gt;mkdirp&gt;minimist </li>
+                        <li>firebase&gt;@firebase/firestore&gt;grpc&gt;node-pre-gyp&gt;tar&gt;mkdirp&gt;minimist </li>
+                    </ul>
+                    <ul>
+                        <li>firebase&gt;@firebase/firestore&gt;grpc&gt;node-pre-gyp&gt;rc&gt;minimist </li>
+                    </ul>
+                    <ul>
+                        <li>react-scripts&gt;fsevents&gt;node-pre-gyp&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;fsevents&gt;node-pre-gyp&gt;tar&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;tar&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;tar&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;tar&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;tar&gt;mkdirp&gt;minimist </li>
+                    </ul>
+                    <ul>
+                        <li>react-scripts&gt;fsevents&gt;node-pre-gyp&gt;rc&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;rc&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;rc&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;rc&gt;minimist </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-haste-map&gt;sane&gt;fsevents&gt;node-pre-gyp&gt;rc&gt;minimist </li>
+                    </ul>
+                    <ul>
+                        <li>react-scripts&gt;webpack&gt;watchpack&gt;chokidar&gt;fsevents&gt;node-pre-gyp&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;webpack-dev-server&gt;chokidar&gt;fsevents&gt;node-pre-gyp&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;webpack&gt;watchpack&gt;chokidar&gt;fsevents&gt;node-pre-gyp&gt;tar&gt;mkdirp&gt;minimist </li>
+                        <li>react-scripts&gt;webpack-dev-server&gt;chokidar&gt;fsevents&gt;node-pre-gyp&gt;tar&gt;mkdirp&gt;minimist </li>
+                    </ul>
+                    <ul>
+                        <li>react-scripts&gt;webpack&gt;watchpack&gt;chokidar&gt;fsevents&gt;node-pre-gyp&gt;rc&gt;minimist </li>
+                        <li>react-scripts&gt;webpack-dev-server&gt;chokidar&gt;fsevents&gt;node-pre-gyp&gt;rc&gt;minimist </li>
+                    </ul>
+
+                    <h3>Remediation</h3>
+                    <p class="card-text"><p>Upgrade to versions 0.2.1, 1.2.3 or later.</p>
+</p>
+                     
+                    <h3>References</h3>
+                    <p class="card-text"><ul>
+<li><a href="https://github.com/substack/minimist/commit/4cf1354839cb972e38496d35e12f806eea92c11f#diff-a1e0ee62c91705696ddb71aa30ad4f95">GitHub commit 1</a></li>
+<li><a href="https://github.com/substack/minimist/commit/63e7ed05aa4b1889ec2f3b196426db4500cbda94">GitHub commit 2</a></li>
+</ul>
+</p>
+                     
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-raised mr-2 btn-primary" href="https://npmjs.com/advisories/1179" target="_blank" rel="noopener">More about
+                        this vulnerability</a>
+                    <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="advisory-modal-1426">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span class="badge badge-secondary">moderate</span>
+                        Cross-Site Scripting
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Module:
+                                    <a href="https://npmjs.com/package/serialize-javascript" target="_blank"
+                                        rel="noopener">serialize-javascript</a>
+                                </li>
+                                <li>Published: December 9th 2019 </li>
+                                <li>Reported by: Ryuichi Okumura</li>
+                                <li>CWE-79</li>
+                                <li>CVE-2019-16769</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Vulnerable: &lt;2.1.1</li>
+                                <li>Patched: &gt;&#x3D;2.1.1</li>
+                                <li>Exploitability: 3</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>Overview</h3>
+                    <p class="card-text"><p>Versions of <code>serialize-javascript</code> prior to 2.1.1 are vulnerable to Cross-Site Scripting (XSS). The package fails to sanitize serialized regular expressions. This vulnerability does not affect Node.js applications.</p>
+</p>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        <li>react-scripts&gt;terser-webpack-plugin&gt;serialize-javascript </li>
+                        <li>react-scripts&gt;webpack&gt;uglifyjs-webpack-plugin&gt;serialize-javascript </li>
+                    </ul>
+
+                    <h3>Remediation</h3>
+                    <p class="card-text"><p>Upgrade to version 2.1.1 or later.</p>
+</p>
+                     
+                    <h3>References</h3>
+                    <p class="card-text"><ul>
+<li><a href="https://github.com/yahoo/serialize-javascript/security/advisories/GHSA-h9rv-jmmf-4pgx">GitHub advisory</a></li>
+</ul>
+</p>
+                     
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-raised mr-2 btn-primary" href="https://npmjs.com/advisories/1426" target="_blank" rel="noopener">More about
+                        this vulnerability</a>
+                    <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="advisory-modal-1488">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span class="badge badge-secondary">moderate</span>
+                        Regular Expression Denial of Service
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Module:
+                                    <a href="https://npmjs.com/package/acorn" target="_blank"
+                                        rel="noopener">acorn</a>
+                                </li>
+                                <li>Published: March 2nd 2020 </li>
+                                <li>Reported by: Peter van der Zee</li>
+                                <li>CWE-400</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Vulnerable: &gt;&#x3D;5.5.0 &lt;5.7.4 || &gt;&#x3D;6.0.0 &lt;6.4.1 || &gt;&#x3D;7.0.0 &lt;7.1.1</li>
+                                <li>Patched: &gt;&#x3D;5.7.4 &lt;6.0.0 || &gt;&#x3D;6.4.1 &lt;7.0.0 || &gt;&#x3D;7.1.1</li>
+                                <li>Exploitability: 3</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>Overview</h3>
+                    <p class="card-text"><p>Affected versions of <code>acorn</code> are vulnerable to Regular Expression Denial of Service. A regex in the form of <code>/[x-\ud800]/u</code> causes the parser to enter an infinite loop. The string is not valid UTF16 which usually results in it being sanitized before reaching the parser. If an application processes untrusted input and passes it directly to <code>acorn</code>, attackers may leverage the vulnerability leading to Denial of Service.</p>
+</p>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-config&gt;jest-environment-jsdom&gt;jsdom&gt;acorn </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-config&gt;jest-environment-jsdom&gt;jsdom&gt;acorn </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runner&gt;jest-runtime&gt;jest-config&gt;jest-environment-jsdom&gt;jsdom&gt;acorn </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-runtime&gt;jest-config&gt;jest-environment-jsdom&gt;jsdom&gt;acorn </li>
+                        <li>react-scripts&gt;jest&gt;jest-cli&gt;jest-environment-jsdom&gt;jsdom&gt;acorn </li>
+                    </ul>
+                    <ul>
+                        <li>react-scripts&gt;webpack&gt;acorn </li>
+                    </ul>
+                    <ul>
+                        <li>react-scripts&gt;webpack&gt;acorn-dynamic-import&gt;acorn </li>
+                    </ul>
+
+                    <h3>Remediation</h3>
+                    <p class="card-text"><p>Upgrade to versions 5.7.4, 6.4.1, 7.1.1 or later.</p>
+</p>
+                      
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-raised mr-2 btn-primary" href="https://npmjs.com/advisories/1488" target="_blank" rel="noopener">More about
+                        this vulnerability</a>
+                    <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#advisories').DataTable({
+                order: [[2, 'asc']]
+            });
+        });
+    </script>
+</body>
+
+</html>
