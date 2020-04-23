@@ -9,7 +9,7 @@ const ItemsDetail = ({
 }) => {
   if (order) {
     return (
-      <>
+      <div>
         <div className="task_status">
           <span className="teal-text itemlistpickers">
             {orderStatus === "" ? "" : getItemListPickers(order.itemlist)}{" "}
@@ -33,7 +33,7 @@ const ItemsDetail = ({
               );
             })}
         </ul>
-      </>
+      </div>
     );
   }
 };

@@ -8,30 +8,30 @@ export const getStatusIcon = (status) => {
     return <i className="fas fa-walking picking"></i>;
   } else if (status === "pick_complete") {
     return (
-      <>
+      <div>
         <i className="fas fa-walking pick_complete"></i>
         <i className="far fa-check-circle pick_complete"></i>
-      </>
+      </div>
     );
   } else if (status === "packing") {
     return <i className="fas fa-box-open packing"></i>;
   } else if (status === "pack_complete") {
     return (
-      <>
+      <div>
         <i className="fas fa-box-open pack_complete"></i>
         <i className="far fa-check-circle pack_complete"></i>
-      </>
+      </div>
     );
   } else if (status === "n/a") {
     return <i className="material-icons orange-text">warning</i>;
   } else {
     return (
-      <>
+      <div>
         {/* <i className="material-icons green white-text">directions_run</i>
           <i className="material-icons orange-text">warning</i>
           <i className="fas fa-box-open pick_complete"></i>
           <i className="far fa-check-circle pick_complete"></i> */}
-      </>
+      </div>
     );
   }
 };

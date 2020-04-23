@@ -14,54 +14,49 @@ const OrderList = ({ orders, profile, handleCreateJob }) => {
    *
    * Categorize "orders" into "newOrders" & "doneOrders"
    * using the strategy in useDataApi2.js
-   * which is that: utilizing 'didCancel' to be aware of mount/unmount, use async() to wait the looping is done
+   * which is that: utilizing 'didCancel' to be aware of mount/unmount,
+   * use async() to wait the looping is done
    * maybe a little overkill
    */
   useEffect(() => {
     let didCancel = false;
     if (orders && Array.isArray(orders)) {
       const fetchData = async () => {
-        try {
-          await new Promise((resolve, reject) => {
-            var obj = {
-              done: [],
-              new: [],
-            };
-            // looping order
-            orders.forEach((o) => {
-              if (!getOrderStatus(o)) {
-                // sometimes, getOrderStatus(o) returns 'undefined'
-                obj["new"] = [...obj.new, o];
-              } else if (getOrderStatus(o).includes("pack_complete")) {
-                obj["done"] = [...obj.done, o];
-              } else {
-                obj["new"] = [...obj.new, o];
-              }
-            }); // complete looping orders
-
-            if (obj) {
-              resolve(obj);
+        await new Promise((resolve, reject) => {
+          var obj = {
+            done: [],
+            newOdr: [],
+          };
+          // looping order
+          orders.forEach((o) => {
+            if (!getOrderStatus(o)) {
+              // sometimes, getOrderStatus(o) returns 'undefined'
+              obj["newOdr"] = [...obj.newOdr, o];
+            } else if (getOrderStatus(o).includes("pack_complete")) {
+              obj["done"] = [...obj.done, o];
             } else {
-              reject(" OrderList msg:  not ready ");
+              obj["newOdr"] = [...obj.newOdr, o];
+            }
+          }); // END: looping orders
+
+          if (obj) {
+            resolve(obj);
+          } else {
+            reject(" OrderList msg:  not ready ");
+          }
+        })
+          .then((result) => {
+            if (!didCancel) {
+              // console.log(result);
+              // only set component state when mounting
+              setNewOrders([...result.newOdr]);
+              setDoneOrders([...result.done]);
             }
           })
-            .then((result) => {
-              if (!didCancel) {
-                // only set component state when mounting
-                setNewOrders([...result.new]);
-                setDoneOrders([...result.done]);
-              }
-            })
-            .catch((e) => {
-              console.error(e);
-            });
-        } catch (error) {
-          if (!didCancel) {
-            console.log("failure");
-          }
-          console.error("useDataApi2.js msg: fetch data error: ", error);
-        }
-      };
+          .catch((e) => {
+            console.error(e);
+          });
+      }; // END: fetchData()
       fetchData();
     } // // END:  if (orders && Array.isArray(orders))
     /**
@@ -69,6 +64,8 @@ const OrderList = ({ orders, profile, handleCreateJob }) => {
      */
     return () => {
       didCancel = true;
+      setNewOrders([]); // add to stop the breaking err: refer to Buglog: filed to execute Bug200422-B
+      setDoneOrders([]); //
     };
   }, [orders]);
 

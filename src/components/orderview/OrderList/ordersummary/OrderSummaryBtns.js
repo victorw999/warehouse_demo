@@ -15,6 +15,7 @@ const OrderSummaryBtns = ({
   profile,
   handleCreateJob,
   deleteOrder,
+  setOdrSumMsg,
 }) => {
   /**
    *  STATES:
@@ -53,140 +54,153 @@ const OrderSummaryBtns = ({
   /**
    *  RETURN
    */
-  return (
-    <>
-      {isSuper(profile) ? (
-        <>
-          {/* // EDIT ORDER */}
-          <Link to={"/order/" + order.id}>
-            <button className="btn-flat teal lighten-1 act_btn">
-              <i className="material-icons white-text">search</i>
+  if (order) {
+    return (
+      <div>
+        {isSuper(profile) ? (
+          <div>
+            {/* // EDIT ORDER */}
+            <Link to={"/order/" + order.id}>
+              <button className="btn-flat teal lighten-1 act_btn">
+                <i className="material-icons white-text">search</i>
+              </button>
+            </Link>
+            {/* // DELETE ORDER */}
+            <button className="btn-flat red act_btn" onClick={handleDelete}>
+              <i className="material-icons white-text ">delete_forever</i>
             </button>
-          </Link>
-          {/* // DELETE ORDER */}
-          <button className="btn-flat red act_btn" onClick={handleDelete}>
-            <i className="material-icons white-text ">delete_forever</i>
-          </button>
-        </>
-      ) : (
-        ""
-      )}
+          </div>
+        ) : (
+          ""
+        )}
 
-      {/*
-       *    PICK BUTTON
-       */}
+        {/*
+         *    PICK BUTTON
+         */}
 
-      {showPick(orderStatus) ? (
-        ""
-      ) : (
-        <BtnPick order={order} handleCreateJob={handleCreateJob} />
-      )}
+        {showPick(orderStatus) ? (
+          ""
+        ) : (
+          <BtnPick order={order} handleCreateJob={handleCreateJob} />
+        )}
 
-      {/* 
+        {/* 
            CANCEL PICK BUTTON
            Only display when all items' status are 'picking', or is undergoing deleting_pick
        */}
-      {showPickCxl(orderStatus) ? (
-        <BtnPickCxl
-          order={order}
-          handleCreateJob={handleCreateJob}
-          stopLoader={stopLoader}
-          profile={profile}
-          setmodalOpen_cancelViolation={setmodalOpen_cancelViolation}
-        />
-      ) : (
-        ""
-      )}
-      {/*
-       *    CREATE PACK
-       */}
-      {orderStatus === "pick_complete" ? (
-        <BtnPack order={order} handleCreateJob={handleCreateJob} />
-      ) : (
-        ""
-      )}
-      {/*
-       *    CANCEL PACK
-       */}
-      {orderStatus === "packing" ? (
-        <BtnPackCxl
-          order={order}
-          handleCreateJob={handleCreateJob}
-          stopLoader={stopLoader}
-          profile={profile}
-          setmodalOpen_cancelViolation={setmodalOpen_cancelViolation}
-        />
-      ) : (
-        ""
-      )}
-      {/*
-       *    N/A OrderNADetails.js
-       */}
-      {showNA(orderStatus) ? (
-        <Link to={"/orderna/" + order.id} key={order.id}>
-          <button className="btn-flat orange act_btn">
-            <i className="material-icons white-text">warning</i>
-          </button>
-        </Link>
-      ) : (
-        ""
-      )}
-      {/* 
+        {showPickCxl(orderStatus) ? (
+          <BtnPickCxl
+            order={order}
+            handleCreateJob={handleCreateJob}
+            stopLoader={stopLoader}
+            profile={profile}
+            setmodalOpen_cancelViolation={setmodalOpen_cancelViolation}
+            setOdrSumMsg={setOdrSumMsg}
+          />
+        ) : (
+          ""
+        )}
+        {/*
+         *    CREATE PACK
+         */}
+        {orderStatus === "pick_complete" ? (
+          <BtnPack order={order} handleCreateJob={handleCreateJob} />
+        ) : (
+          ""
+        )}
+        {/*
+         *    CANCEL PACK
+         */}
+        {orderStatus === "packing" ? (
+          <BtnPackCxl
+            order={order}
+            handleCreateJob={handleCreateJob}
+            stopLoader={stopLoader}
+            profile={profile}
+            setmodalOpen_cancelViolation={setmodalOpen_cancelViolation}
+          />
+        ) : (
+          ""
+        )}
+        {/*
+         *    N/A OrderNADetails.js
+         */}
+        {showNA(orderStatus) ? (
+          <Link to={"/orderna/" + order.id} key={order.id}>
+            <button className="btn-flat orange act_btn">
+              <i className="material-icons white-text">warning</i>
+            </button>
+          </Link>
+        ) : (
+          ""
+        )}
+        {/* 
           END ACTION BTNS
        */}
-      {/*
-       *
-       * "confirmation modal" ref: https://stackoverflow.com/a/54392589/5844090
-       * */}
-      <ConfirmDeletion
-        onClickYes={null}
-        onClickNo={null}
-        name={order.amzId}
-        open={modalOpen_deleteOrder}
-        header={"Are you sure to Delete this order?"}
-        actions={[
-          <button
-            onClick={modalNo_deleteOrder}
-            className="modal-close waves-green btn-flat"
-          >
-            No
-          </button>,
-          <button
-            onClick={modalYes_deleteOrder}
-            className="modal-close btn-flat red white-text"
-          >
-            Yes
-          </button>,
-        ]}
-      />
-      {/* 
+        {/*
+         *
+         * "confirmation modal" ref: https://stackoverflow.com/a/54392589/5844090
+         * */}
+
+        <ConfirmDeletion
+          onClickYes={null}
+          onClickNo={null}
+          name={order.amzId}
+          open={modalOpen_deleteOrder}
+          header={"Are you sure to Delete this order?"}
+          actions={[
+            <button
+              onClick={modalNo_deleteOrder}
+              className="modal-close waves-green btn-flat"
+            >
+              No
+            </button>,
+            <button
+              onClick={modalYes_deleteOrder}
+              className="modal-close btn-flat red white-text"
+            >
+              Yes
+            </button>,
+          ]}
+        />
+
+        {/* 
       END MODAL
        */}
-      {/* 
+        {/* 
           CANCEL VIOLATION MsgModal 
       */}
-      <MsgModal
-        id="cancel_violation"
-        open={modalOpen_cancelViolation}
-        header="Cancel Violation"
-        content="can NOT cancel tasks belong to others !!!"
-        actions={[
-          <button
-            onClick={modalNo_cancelViolation}
-            className="modal-close teal lighten-1 btn-flat"
-          >
-            Close
-          </button>,
-        ]}
-        options={{
-          onCloseEnd: modalNo_cancelViolation, // reset the local var for trigger next time
-        }}
-      />
-      {/* 
+
+        {/* react-materialize Modal causing breaking err after updated react-script to v3 */}
+        {/* <MsgModal
+          id="cancel_violation"
+          open={modalOpen_cancelViolation}
+          header="Cancel Violation"
+          content="can NOT cancel tasks belong to others !!!"
+          actions={[
+            <button
+              onClick={modalNo_cancelViolation}
+              className="modal-close teal lighten-1 btn-flat"
+            >
+              Close
+            </button>,
+          ]}
+          options={{
+            // onCloseEnd: () => {
+            //   setmodalOpen_cancelViolation(false);
+            // },
+            onCloseEnd: modalNo_cancelViolation, // reset the local var for trigger next time
+          }}
+        /> */}
+
+        {/* 
           END: CANCEL VIOLATION MsgModal 
       */}
-    </>
-  );
+      </div>
+    );
+  } else {
+    return <p>Loading ...</p>;
+  }
 };
 
 /**
