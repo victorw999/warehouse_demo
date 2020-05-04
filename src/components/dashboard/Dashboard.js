@@ -11,6 +11,7 @@ import { createJob } from "../../store/actions/jobActions";
 import { createNotification } from "../../store/actions/noteActions";
 import { clearOrderStatus } from "../../store/actions/orderActions";
 import Notifications from "./Notifications";
+import Notification1 from "./Notification1";
 import { isSuper } from "../utilityFunc/functions";
 
 class Dashboard extends Component {
@@ -35,17 +36,22 @@ class Dashboard extends Component {
     if (!auth.uid) return <Redirect to="/signin" />;
     return (
       <div className="dashboard container ">
-        <div className="center">
-          {/* <h5 className="center">DEVELOPER TOOLS:</h5>
+        {/*
+         <div className="center">
+           <h5 className="center">DEVELOPER TOOLS:</h5>
           <button className="btn grey" onClick={this.clearOrderStatus}>
             RESET ORDER STATUS
           </button>
           <button className="btn red" onClick={this.clearAllTasks}>
             CLEAR ALL TASKS
-          </button> */}
-          <a className="btn teal" href="#notifications">
-            Go To Notifications
+          </button> 
+        </div>
+        */}
+        <div className="notification_bar teal lighten-4">
+          <a className="btn teal btn-flat white-text" href="#notifications">
+            Notifications
           </a>
+          <Notification1 notifications={notifications} />
         </div>
 
         {/* Styles */}
