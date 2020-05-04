@@ -78,13 +78,16 @@ const Users = (props) => {
                       <input
                         type="text"
                         id="role"
+                        className="btn disabled"
+                        /** hidden on demo_warehouse */
                         data-uid={u}
                         onChange={handleChange}
                         value={data[u].role && data[u].role}
                       />
                     </div>
                     <div className="col s2">
-                      <span className="">{u}</span>
+                      {/* userid hidden on demo_warehouse */}
+                      {/* <span className="">{u}</span> */}
                     </div>
                   </li>
                 );
@@ -98,13 +101,22 @@ const Users = (props) => {
           <div className="input-field">
             <LoaderButton
               btnName={"update"}
-              btnFormat={"btn pink lighten-1"}
+              // btnFormat={"btn pink lighten-1"}
+              /** hidden on demo_warehouse */
+              btnFormat={"btn disabled"}
               // animationDuration={"infinite"}
               handleClick={() => {
-                updateUsers(payload);
-                props.history.push("/");
+                /**
+                 *
+                 * disabled for demo_warehouse
+                 *
+                 *
+                 */
+                // updateUsers(payload);
+                // props.history.push("/");
               }}
             />
+            <span className="red-text">* not allow to modify on demo</span>
           </div>
         </form>
       </div>

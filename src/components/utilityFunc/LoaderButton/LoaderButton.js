@@ -11,9 +11,9 @@ const LoaderButton = ({
   hasIcon,
   icon,
   iconPos = "",
-  animationDuration
+  animationDuration,
 }) => {
-  const iconPos_class = iconPos => {
+  const iconPos_class = (iconPos) => {
     if (iconPos === "") {
       return "right"; //default
     } else if (iconPos === "middle") {
@@ -37,19 +37,28 @@ const LoaderButton = ({
            *              this "infinite" value is used in BtnPick.js, BtnPack.js
            *
            **/
+
           (async () => {
-            let duration = animationDuration ? animationDuration : 5000; // default
-            await showLoader(true);
-            // console.log(`========showLoader(true) duration:${duration}`);
-            if (animationDuration !== "infinite") {
-              // console.log("========animationDuration NOT INFINITE");
-              await setTimeout(() => {
-                showLoader(false);
-                // console.log("========showLoader(false) ");
-              }, duration);
+            try {
+              let duration = animationDuration ? animationDuration : 5000; // default
+              console.log("******* DURATION: ", duration);
+              // debugger;
+              await showLoader(true);
+
+              if (animationDuration !== "infinite") {
+                await console.log("******* 000: ");
+                await setTimeout(async () => {
+                  await console.log("******* 111: ");
+                  await showLoader(false);
+                  await console.log("******* 222: ");
+                }, duration);
+              }
+              handleClick();
+            } catch (e) {
+              console.log("Error Caught: ", e);
             }
-            await handleClick();
           })();
+          //
         }}
       >
         {btnName}

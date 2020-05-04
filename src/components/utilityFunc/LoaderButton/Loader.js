@@ -1,18 +1,18 @@
 // REF: https://stackoverflow.com/q/47606594/5844090
 import React, { Component } from "react";
 
-const Loader = WrappedComponent => {
+const Loader = (WrappedComponent) => {
   return class Loader extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        isLoading: false
+        isLoading: false,
       };
       this.showLoader = this.showLoader.bind(this);
     }
 
     showLoader(input) {
-      console.log(`-------showLoader( ) input:${input}`);
+      console.log(`******* showLoader( ) input:${input}`);
       this.setState({ isLoading: input }); // original default was true
     }
 

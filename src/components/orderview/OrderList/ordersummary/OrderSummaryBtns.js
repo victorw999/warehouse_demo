@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import MsgModal from "../../../modals/MsgModal";
 import { Link } from "react-router-dom";
 import ConfirmDeletion from "../../../modals/ConfirmDeletion";
@@ -8,6 +8,7 @@ import BtnPackCxl from "./BtnPackCxl";
 import BtnPick from "./BtnPick";
 import BtnPickCxl from "./BtnPickCxl";
 import { isSuper } from "../../../utilityFunc/functions";
+import LoaderButton from "../../../utilityFunc/LoaderButton/LoaderButton";
 
 const OrderSummaryBtns = ({
   order,
@@ -18,20 +19,17 @@ const OrderSummaryBtns = ({
   setOdrSumMsg,
 }) => {
   /**
+   * ref for ConfirmDeletion Modal's trigger
+   */
+  const ref_hidden_modal_trigger = useRef(null);
+
+  /**
    *  STATES:
    */
   const [modalOpen_deleteOrder, setmodalOpen_deleteOrder] = useState(false); // hooks for Modal ConfirmDeletion
   const [modalOpen_cancelViolation, setmodalOpen_cancelViolation] = useState(
     false
   );
-
-  /**
-   *  FUNCTION
-   *  Delete this order
-   */
-  const handleDelete = () => {
-    setmodalOpen_deleteOrder(true); // open modal for user confirmation
-  };
 
   /**
    *  FUNCTION: controls delete order modal
@@ -66,7 +64,12 @@ const OrderSummaryBtns = ({
               </button>
             </Link>
             {/* // DELETE ORDER */}
-            <button className="btn-flat red act_btn" onClick={handleDelete}>
+            <button
+              className="btn-flat red act_btn"
+              onClick={() => {
+                ref_hidden_modal_trigger.current.click(); // trigger the ConfirmDeletion Modal
+              }}
+            >
               <i className="material-icons white-text ">delete_forever</i>
             </button>
           </div>
@@ -78,7 +81,7 @@ const OrderSummaryBtns = ({
          *    PICK BUTTON
          */}
 
-        {showPick(orderStatus) ? (
+        {hidePick(orderStatus) ? (
           ""
         ) : (
           <BtnPick order={order} handleCreateJob={handleCreateJob} />
@@ -92,7 +95,6 @@ const OrderSummaryBtns = ({
           <BtnPickCxl
             order={order}
             handleCreateJob={handleCreateJob}
-            stopLoader={stopLoader}
             profile={profile}
             setmodalOpen_cancelViolation={setmodalOpen_cancelViolation}
             setOdrSumMsg={setOdrSumMsg}
@@ -137,11 +139,10 @@ const OrderSummaryBtns = ({
         {/* 
           END ACTION BTNS
        */}
-        {/*
-         *
-         * "confirmation modal" ref: https://stackoverflow.com/a/54392589/5844090
-         * */}
 
+        {/* 
+          MODAL        
+        */}
         <ConfirmDeletion
           onClickYes={null}
           onClickNo={null}
@@ -162,6 +163,16 @@ const OrderSummaryBtns = ({
               Yes
             </button>,
           ]}
+          // hidden trigger
+          trigger={
+            <button
+              className="hidden-modal-trigger"
+              style={{ visibility: "hidden", position: "absolute" }}
+              ref={(button) => (ref_hidden_modal_trigger.current = button)}
+            >
+              HIDDEN MODAL TRIGGER
+            </button>
+          }
         />
 
         {/* 
@@ -208,7 +219,7 @@ const OrderSummaryBtns = ({
  *                  when these "cases", DON'T show btn
  *  @return boolean
  */
-const showPick = (status) => {
+const hidePick = (status) => {
   switch (status) {
     case "n/a":
     case "all_in_pick_stage": // items are either 'picking/pick_complete'. "pick" btn should be hidden, becuase no more picktasks; 'packing' btn also hidden, because the whole order is not ready

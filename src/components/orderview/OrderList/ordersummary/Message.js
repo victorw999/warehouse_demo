@@ -9,6 +9,6 @@ const Message = ({ msg, timeout }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  return <div className="red">{m}</div>;
+  return <div className="red white-text center">{m}</div>;
 };
 export default Message;

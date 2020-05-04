@@ -47,7 +47,6 @@ const OrderList = ({ orders, profile, handleCreateJob }) => {
         })
           .then((result) => {
             if (!didCancel) {
-              // console.log(result);
               // only set component state when mounting
               setNewOrders([...result.newOdr]);
               setDoneOrders([...result.done]);
@@ -64,8 +63,6 @@ const OrderList = ({ orders, profile, handleCreateJob }) => {
      */
     return () => {
       didCancel = true;
-      setNewOrders([]); // add to stop the breaking err: refer to Buglog: filed to execute Bug200422-B
-      setDoneOrders([]); //
     };
   }, [orders]);
 

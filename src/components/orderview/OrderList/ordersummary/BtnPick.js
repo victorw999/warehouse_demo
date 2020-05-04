@@ -23,7 +23,6 @@ const BtnPick = ({ order, handleCreateJob }) => {
           // add additional info to itemlist
           picktask_itemlist = picktask_itemlist.map((i) => {
             return {
-              // only add what's needed into task
               sku: i.sku,
               quantity: i.quantity,
               key: i.key,
@@ -39,19 +38,21 @@ const BtnPick = ({ order, handleCreateJob }) => {
             picktask_itemlist
           );
 
-          var task = {
-            itemlist: [
-              {
-                sku: "168-TEST",
-                quantity: 12,
-                key: "item+key",
-                buyer: "tester",
-                order_docId: "Ccs0bmfJh6lJTYLn55NX",
-              },
-            ],
-          };
-          console.log("=========BtnPick.js: task: ", task);
+          // testing usecase
+          // var task = {
+          //   itemlist: [
+          //     {
+          //       sku: "168-TEST",
+          //       quantity: 12,
+          //       key: "item+key",
+          //       buyer: "tester",
+          //       order_docId: "Ccs0bmfJh6lJTYLn55NX",
+          //     },
+          //   ],
+          // };
+          // console.log("=========BtnPick.js: task: ", task);
 
+          /** here it cause the LoaderButter to stop spinning */
           handleCreateJob(picktask_itemlist, "createPickTask", "order_view");
         } else {
           console.log("BtnPick.js: list not ready!!!");

@@ -35,18 +35,14 @@ class Dashboard extends Component {
     if (!auth.uid) return <Redirect to="/signin" />;
     return (
       <div className="dashboard container ">
-        <div>
-          {/*   
-          DEVELOPER TOOLS:        
+        <div className="center">
+          {/* <h5 className="center">DEVELOPER TOOLS:</h5>
           <button className="btn grey" onClick={this.clearOrderStatus}>
             RESET ORDER STATUS
           </button>
-
           <button className="btn red" onClick={this.clearAllTasks}>
             CLEAR ALL TASKS
-          </button>
-           */}
-
+          </button> */}
           <a className="btn teal" href="#notifications">
             Go To Notifications
           </a>

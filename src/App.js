@@ -15,6 +15,7 @@ import "materialize-css/dist/css/materialize.min.css";
 import TimeReport from "./components/report/TimeReport";
 import ImportOrders from "./components/import/ImportOrders";
 import Users from "./components/users/Users";
+import TestModal from "./components/staffview/TestModal";
 
 class App extends Component {
   constructor(props) {
@@ -53,6 +54,8 @@ class App extends Component {
             <Route path="/importorders" component={ImportOrders} />
             <Route path="/timereport" component={TimeReport} />
             <Route path="/users" component={Users} />
+
+            <Route path="/testModal" component={TestModal} />
           </Switch>
         </div>
       </BrowserRouter>

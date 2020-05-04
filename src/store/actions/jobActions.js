@@ -88,7 +88,7 @@ export const createJob = (job, jobType, flag) => {
     }
 
     console.log("jobActions.js => payload", payload);
-    execute(firestore, payload, dispatch);
+    execute(firestore, payload, dispatch); // returns  a promise
   };
 };
 
@@ -160,18 +160,20 @@ const reduceList = (job, jobType, flag, profile) => {
  */
 
 const execute = (firestore, payload, dispatch) => {
-  firestore
-    .collection("jobs")
-    .add(payload)
-    // .then(docRef => {
-    //   docRef.get().then(snap => {
-    //     docRef.update({ ...snap.data(), docId: docRef.id });
-    //   });
-    // })
-    .then(() => {
-      dispatch({ type: "CREATE_JOB", payload });
-    })
-    .catch((err) => {
-      dispatch({ type: "CREATE_JOB_ERROR", err });
-    });
+  return (
+    firestore
+      .collection("jobs")
+      .add(payload)
+      // .then(docRef => {
+      //   docRef.get().then(snap => {
+      //     docRef.update({ ...snap.data(), docId: docRef.id });
+      //   });
+      // })
+      .then(() => {
+        dispatch({ type: "CREATE_JOB", payload });
+      })
+      .catch((err) => {
+        dispatch({ type: "CREATE_JOB_ERROR", err });
+      })
+  );
 };

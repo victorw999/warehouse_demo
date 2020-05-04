@@ -11,7 +11,8 @@
       then change props back to "", to reset the loader button
  * */
 
-export default function(changeStatefunc) {
+export default function (changeStatefunc) {
+  console.log("stopLoader.js called");
   (async () => {
     await setTimeout(() => {
       changeStatefunc("stop_loader");
