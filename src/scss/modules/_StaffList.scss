@@ -1,0 +1,112 @@
+.stafflist {
+  // header format
+  .collapsible-header.staff_header {
+    margin: 0 !important;
+  }
+  .collapsible-body {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  // number of tasks btn
+  .collapsible_stafflist {
+    .name {
+      font-size: 1rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin: 0;
+    }
+    .numOfTasks {
+      text-align: center;
+    }
+  }
+
+  // list.js
+  .user_list_item {
+    .item_qty {
+      font-weight: 900;
+      background: color("grey", "lighten-4");
+      color: color("teal", "base");
+      padding: 0px 0.5rem;
+      margin: 0.2rem 0.5rem;
+    }
+  }
+
+  // user_tasks_collap_body
+  .user_tasks_collap_body {
+    .staff_task.row {
+      .item_desc {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        .item_desc_row {
+          margin: 0.1rem 0rem;
+        }
+        .status_badge {
+          padding: 0.1rem 0.3rem;
+          margin: 0.2rem;
+        }
+      } // .item_desc
+
+      @media #{$medium-and-up} {
+        box-shadow: unset; // Remove Shadow
+      }
+    } // .staff_task.row
+
+    @media #{$small-and-down} {
+      .staff_task.row {
+        .order_desc,
+        .item_desc,
+        .actions_section {
+          text-align: center;
+        }
+
+        .item_desc {
+          align-items: center;
+        }
+      } // staff_task.row
+    } // END MOBILE @media #{$small-and-down}
+  } //. user_tasks_collap_body
+
+  &.done_tasks_section {
+    .collapsible-header {
+      background-color: color("grey", "base") !important;
+    }
+  } // .done_task_section
+
+  // actions_section
+  .actions_section {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    // height: 10rem;
+    // better make button into 2 rows so on mobile easy to click
+    .act_btn {
+      color: white;
+      width: 3rem;
+      height: 3rem;
+      margin: 0.3rem;
+      padding: 0;
+
+      &.teal_before {
+        color: color("teal", "lighten-1");
+        border: color("teal", "lighten-1") 1px solid;
+        & .material-icons {
+          // float: unset !important;
+          // margin: 0;
+        }
+      }
+      &.teal_after {
+        cursor: default;
+        color: transparent;
+        background-color: color("teal", "lighten-1");
+        border: color("teal", "lighten-1") 1px solid;
+        & .material-icons {
+          color: white;
+        }
+      }
+    }
+  } //actions_section
+}

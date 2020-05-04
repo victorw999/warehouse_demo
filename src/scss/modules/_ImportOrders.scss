@@ -1,0 +1,17 @@
+.import_orders {
+  background: white;
+  padding: 1rem;
+
+  ol.order_ol {
+    li {
+      td {
+        margin: 0;
+        padding: 0 0.5rem;
+      }
+      .date {
+        // background: color("teal", "lighten-4");
+        // padding: 0 1rem;
+      }
+    } // li
+  } //ol.order_ol
+} // .import_orders

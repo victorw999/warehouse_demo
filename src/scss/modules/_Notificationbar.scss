@@ -1,0 +1,25 @@
+.notification_bar {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 0;
+  @media #{$medium-and-down} {
+    justify-content: center;
+  }
+  @media #{$small-and-down} {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  & span {
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+
+  .notification1 {
+    display: inline-block;
+    @media #{$medium-and-down} {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

@@ -1,0 +1,119 @@
+.stylelist {
+  .collapsible {
+    margin: 0;
+    padding: 0;
+    .collapsible-header {
+      margin: 0;
+    }
+  } // END: .collapsible.item-row
+
+  .collapsible-item {
+    @media #{$medium-and-up} {
+      // padding-left: 1rem !important;
+    }
+
+    @media #{$small-and-down} {
+      // styles for small screens and down
+      // padding-left: 1rem !important;
+      // flex-wrap: wrap;
+    }
+    .collapsible-header {
+      .sku_qty {
+        text-align: center;
+      }
+      .title {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      .buyer {
+        margin: 0;
+      }
+      @media #{$small-and-down} {
+        // flex-direction: column;
+        p {
+          margin: 0;
+        }
+        span.title {
+          font-size: 1rem;
+        }
+      }
+      //disable pick btn when the item is selected by a picker
+      .disablePickBtn {
+        background-color: transparent !important;
+        box-shadow: none;
+        color: color("teal", "lighten-5") !important;
+        overflow-wrap: break-word;
+      }
+
+      //override default hover cursors
+      &:hover {
+        cursor: default;
+      }
+      .pickbtn {
+        cursor: pointer;
+      }
+    } // .collapsible-header
+    .collapsible-body {
+      margin: 0;
+      padding: 0rem;
+      @media #{$small-and-down} {
+        padding: 0.3rem;
+      }
+
+      .utilButton_row.row {
+        margin: 1rem 0;
+      }
+
+      .utilButton {
+        width: 9rem;
+        color: white;
+        @media #{$small-and-down} {
+          margin: 0.3rem 0;
+        }
+        i {
+          color: white;
+        }
+      }
+
+      .StyleListInnerList {
+        ul {
+          padding-top: 0.5rem;
+        }
+        .na_btn {
+          display: flex;
+          justify-content: space-evenly;
+        }
+        .missing {
+          width: 20rem;
+          display: flex;
+          flex-direction: column;
+          margin: auto;
+        }
+        .name_status {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          span {
+            margin: auto;
+          }
+          .status {
+            font-size: 0.8rem;
+          }
+        }
+      }
+
+      //override default hover cursors
+      &:hover {
+        cursor: default;
+      }
+    } // end collapsible-body
+    //override default hover cursors
+    &:hover {
+      cursor: default;
+    }
+  } // END .collapsible-item
+
+  .groupheader span {
+    border-radius: 0px;
+  }
+}
