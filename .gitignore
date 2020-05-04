@@ -22,10 +22,12 @@ yarn-error.log*
 #vic
 /src/config/*
 /src/scss/materialize/*
+/.vscode/*
 
 # production
 /build
 /dist
+.onetoc2
 
 # cloud func
 .firebaserc
