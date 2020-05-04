@@ -23,6 +23,7 @@ yarn-error.log*
 /src/config/*
 /src/scss/materialize/*
 /.vscode/*
+/.vscode/
 
 # production
 /build
