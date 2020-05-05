@@ -20,6 +20,7 @@ const Navbar = (props) => {
         <div className="container">
           <Link to="/" className="brand-logo akwa_logo ">
             AKWA
+            <span className="version"> v 1.1.0 </span>
           </Link>
 
           <div className="nav-content navtabs_wrapper center brand-logo">
