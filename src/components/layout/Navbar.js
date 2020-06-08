@@ -4,6 +4,7 @@ import SignedInLinks from "./SignedInLinks";
 import SignedOutLinks from "./SignedOutLinks";
 import { connect } from "react-redux";
 import NavTabs from "./NavTabs";
+import packageJson from "../../../package.json";
 
 const Navbar = (props) => {
   const { auth, profile, updateTab, showTab } = props;
@@ -20,7 +21,7 @@ const Navbar = (props) => {
         <div className="container">
           <Link to="/" className="brand-logo akwa_logo ">
             AKWA
-            <span className="version"> v 1.1.0 </span>
+            <span className="version"> v{packageJson.version}</span>
           </Link>
 
           <div className="nav-content navtabs_wrapper center brand-logo">
