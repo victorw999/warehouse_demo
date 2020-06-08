@@ -8,14 +8,15 @@ class SignUp extends Component {
     email: "",
     password: "",
     firstName: "",
-    lastName: ""
+    lastName: "",
+    signupcode: "",
   };
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     });
   };
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.signUp(this.state);
   };
@@ -44,6 +45,10 @@ class SignUp extends Component {
             <input type="text" id="lastName" onChange={this.handleChange} />
           </div>
           <div className="input-field">
+            <label htmlFor="lastName">Signup Code</label>
+            <input type="text" id="signupcode" onChange={this.handleChange} />
+          </div>
+          <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Sign Up</button>
             <div className="red-text center">
               {authError ? <p> {authError} </p> : null}
@@ -55,20 +60,17 @@ class SignUp extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     auth: state.firebase.auth,
-    authError: state.auth.authError
+    authError: state.auth.authError,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    signUp: newUser => dispatch(signUp(newUser))
+    signUp: (newUser) => dispatch(signUp(newUser)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SignUp);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
