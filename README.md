@@ -1,7 +1,20 @@
-# Pacico Warehouse Shipping System for Amazon 2019
+# Warehouse Management System
 
-This project to to manage & track warehouse packing/shipping tasks in order to streamline the operation for online orders.
+This project (react/firebase web app) is to manage & track warehouse packing/shipping tasks in order to streamline the operation for online orders.
 
+### Features:
+- Track workers task duration
+- Realtime inspection by supervisor
+- Realtime inventory alert
+- Worker efficiency report
+
+### Technology:
+
+ - React, Redux
+ - Materialize | Mobile-first layout
+ - Firebase | User accounts & authentication
+ - Firestore | NoSQL Database
+    
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
