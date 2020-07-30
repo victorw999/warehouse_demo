@@ -14,7 +14,12 @@ This project (react/firebase web app) is to manage & track warehouse packing/shi
  - Materialize | Mobile-first layout
  - Firebase | User accounts & authentication
  - Firestore | NoSQL Database
-    
+
+### [Video Demo](https://youtu.be/xh8hlcQzXGM)   |   [Live Demo](https://warehouse.findvictor.com)
+
+![React Warehouse App](gif/shortdemo1.gif)
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
