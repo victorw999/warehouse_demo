@@ -1,21 +1,18 @@
 import React, { Component } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import "materialize-css/dist/css/materialize.min.css";
 import Navbar from "./components/layout/Navbar";
 import Dashboard from "./components/dashboard/Dashboard";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
-
-// Order View
 import CreateOrder from "./components/orderview/CreateOrder/CreateOrder";
 import OrderDetails from "./components/orderview/OrderDetails/OrderDetails";
 import OrderNADetails from "./components/orderview/OrderNADetails/OrderNADetails";
-
-import "materialize-css/dist/css/materialize.min.css";
-
 import TimeReport from "./components/report/TimeReport";
 import ImportOrders from "./components/import/ImportOrders";
 import Users from "./components/users/Users";
 import TestModal from "./components/staffview/TestModal";
+import NotFoundPage from "./components/dashboard/NotFoundPage";
 
 class App extends Component {
   constructor(props) {
@@ -54,8 +51,8 @@ class App extends Component {
             <Route path="/importorders" component={ImportOrders} />
             <Route path="/timereport" component={TimeReport} />
             <Route path="/users" component={Users} />
-
             <Route path="/testModal" component={TestModal} />
+            <Route component={NotFoundPage} />
           </Switch>
         </div>
       </BrowserRouter>
