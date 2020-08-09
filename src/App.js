@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import "materialize-css/dist/css/materialize.min.css";
+// import "materialize-css/dist/css/materialize.min.css";
 import Navbar from "./components/layout/Navbar";
 import Dashboard from "./components/dashboard/Dashboard";
 import SignIn from "./components/auth/SignIn";
