@@ -7,7 +7,7 @@
     "firebase": "^7.17.2",
     "materialize-css": "^1.0.0",
     "moment": "^2.22.2",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "npm-audit-html": "^1.4.1",
     "react": "^16.4.1",
     "react-csv": "^2.0.1",
